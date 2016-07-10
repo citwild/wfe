@@ -6,7 +6,6 @@ import (
 	"os"
 	"net/http"
 	"log"
-	"github.com/wide-field-ethnography/wfe/api"
 )
 
 func init() {
@@ -83,7 +82,6 @@ The options are:
 	}
 
 	m := http.NewServeMux()
-	m.Handle("/api/", http.StripPrefix("/api", api.Handler()))
 
 	log.Print("Listening on ", *httpAddr)
 	err := http.ListenAndServe(*httpAddr, m)
