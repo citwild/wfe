@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 	"net/http"
-	"citw.uw.edu/wfe/api"
 	"log"
+	"github.com/wide-field-ethnography/wfe/api"
 )
 
 func init() {

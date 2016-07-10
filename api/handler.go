@@ -2,7 +2,7 @@ package api
 
 import (
 	"github.com/gorilla/mux"
-	"citw.uw.edu/wfe/router"
+	"github.com/wide-field-ethnography/wfe/router"
 )
 
 func Handler() *mux.Router  {
