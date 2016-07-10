@@ -2,6 +2,13 @@
 
 [Wide-field ethnography](http://depts.washington.edu/citw/wordpress/?page_id=55) web app. Currently a work-in-progress.
 
+## Requirements
+
+- [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+- [Go](https://golang.org/doc/install)
+
+Make sure you [set up your GOPATH](https://golang.org/doc/code.html#GOPATH). 
+
 ## Get
 
 ```
