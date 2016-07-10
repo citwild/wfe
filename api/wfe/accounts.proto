@@ -1,6 +1,16 @@
 syntax = "proto3";
 package wfe;
 
+message User {
+    int32 UID = 1;
+    string Login = 2;
+    string Name = 3;
+}
+
+message EmailAddr {
+    string Email = 1;
+}
+
 service Accounts {
     rpc Create(NewAccount) returns (CreatedAccount);
 }
