@@ -4,4 +4,4 @@
 
 ## License
 
-The WFE web app is licensed under the [MIT License](https://opensource.org/licenses/MIT), which is an (open source license)[https://opensource.org/docs/osd].
+The WFE web app is licensed under the [MIT License](https://opensource.org/licenses/MIT), which is an [open source license](https://opensource.org/docs/osd).
