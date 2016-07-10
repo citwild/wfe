@@ -4,8 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"net/http"
 	"log"
+	"google.golang.org/grpc"
+	"net"
 )
 
 func init() {
@@ -81,11 +82,12 @@ The options are:
 		fs.Usage()
 	}
 
-	m := http.NewServeMux()
-
 	log.Print("Listening on ", *httpAddr)
-	err := http.ListenAndServe(*httpAddr, m)
+	lis, err := net.Listen("tcp", *httpAddr)
 	if err != nil {
-		log.Fatal("ListenAndServe:", err)
+		log.Fatal("Listen:", err)
 	}
+
+	s := grpc.NewServer()
+	s.Serve(lis)
 }

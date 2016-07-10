@@ -1,15 +1,8 @@
 syntax = "proto3";
-package api;
-
-message User {
-    int32 UID = 1;
-    string Login = 2;
-    string Name = 3;
-}
+package wfe;
 
 service Accounts {
     rpc Create(NewAccount) returns (CreatedAccount);
-    rpc Update(User) returns (Empty);
 }
 
 message CreatedAccount {
@@ -22,5 +15,3 @@ message NewAccount {
     string Password = 3;
     int32 UID = 4;
 }
-
-message Empty {}

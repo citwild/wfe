@@ -1,4 +1,6 @@
-.PHONY: distclean generate install wfe
+.DEFAULT_GOAL := install
+
+.PHONY: distclean generate test install wfe
 
 WFE_OS_NAME := $(shell uname -o 2>/dev/null || uname -s)
 
@@ -32,6 +34,9 @@ distclean:
 
 generate:
 	go list ./... | xargs go generate
+
+test: 
+	go list ./... | xargs go test
 
 install: wfe
 
