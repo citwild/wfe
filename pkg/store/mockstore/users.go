@@ -5,7 +5,7 @@ package mockstore
 
 import (
 	gomock "github.com/golang/mock/gomock"
-	wfe "github.com/wide-field-ethnography/wfe/api/wfe"
+	wfe "github.com/citwild/wfe/api/wfe"
 	context "golang.org/x/net/context"
 )
 

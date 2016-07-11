@@ -4,8 +4,8 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
-	"github.com/wide-field-ethnography/wfe/api/wfe"
-	"github.com/wide-field-ethnography/wfe/pkg/store/mockstore"
+	"github.com/citwild/wfe/api/wfe"
+	"github.com/citwild/wfe/pkg/store/mockstore"
 	"golang.org/x/net/context"
 )
 

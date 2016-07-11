@@ -2,7 +2,7 @@ package backend
 
 import (
 	"golang.org/x/net/context"
-	"github.com/wide-field-ethnography/wfe/api/wfe"
+	"github.com/citwild/wfe/api/wfe"
 )
 
 var Accounts wfe.AccountsServer = &accounts{}
