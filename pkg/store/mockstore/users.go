@@ -4,8 +4,8 @@
 package mockstore
 
 import (
-	gomock "github.com/golang/mock/gomock"
 	wfe "github.com/citwild/wfe/api/wfe"
+	gomock "github.com/golang/mock/gomock"
 	context "golang.org/x/net/context"
 )
 
