@@ -1,3 +1,4 @@
 package mock_store
 
-//go:generate mockgen -package=mock_store -source=../users.go -destination=users.go
+//go:generate go get github.com/golang/mock/mockgen
+//go:generate sh -c "mockgen github.com/citwild/wfe/store Accounts > users.go"
