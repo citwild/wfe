@@ -19,7 +19,7 @@ Usage:
 
 The commands are:
 `)
-		for _, c := range commands {
+		for _, c := range subcommands {
 			fmt.Fprintf(os.Stderr, "	%-12s %s\n", c.name, c.description)
 		}
 		fmt.Fprintln(os.Stderr, `
@@ -41,25 +41,25 @@ func main() {
 	log.SetFlags(0)
 
 	cmd := flag.Arg(0)
-	for _, c := range commands {
+	for _, c := range subcommands {
 		if c.name == cmd {
 			c.run(flag.Args()[1:])
 			return
 		}
 	}
 
-	fmt.Fprintf(os.Stderr, "unknown command %q\n", cmd)
+	fmt.Fprintf(os.Stderr, "unknown subcommand %q\n", cmd)
 	fmt.Fprintln(os.Stderr, `Run "wfe -h" for usage.`)
 	os.Exit(1)
 }
 
-type command struct {
+type subcommand struct {
 	name        string
 	description string
 	run         func(args []string)
 }
 
-var commands = []command{
+var subcommands = []subcommand{
 	{"serve", "start web server", serve},
 }
 
