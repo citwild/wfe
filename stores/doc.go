@@ -1,2 +1,2 @@
-// Package stores defines interfaces for data stores that persist and manage collections of domain objects.
+// Package stores declares the data stores used to persist and manage collections of domain objects.
 package stores

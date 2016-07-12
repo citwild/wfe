@@ -1,2 +1,2 @@
-// Package api defines interfaces for the wfe application programming interface.
+// Package api declares the wfe application programming interface.
 package api

@@ -1,2 +1,2 @@
-// Package services contains implementations for services generally defined in the API.
+// Package services implements services generally declared in the API.
 package services
