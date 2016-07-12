@@ -20,7 +20,7 @@ func TestCreate(t *testing.T) {
 		Return(&api.User{UID: 123}, nil)
 
 	password := stores.PasswordFromContext(ctx).(*mock_stores.MockPassword)
-	password.EXPECT().SetPassword(ctx, int32(123), "pass").Return(nil)
+	password.EXPECT().SetPassword(ctx, int32(123), "pass")
 
 	Accounts.Create(ctx, &api.NewAccount{Login: "me", Password: "pass", Email: "e@mail.com"})
 }
