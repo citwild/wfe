@@ -29,5 +29,10 @@ func (s *accounts) Create(ctx context.Context, newAcct *api.NewAccount) (*api.Cr
 		return nil, err
 	}
 
+	err = stores.PasswordFromContext(ctx).SetPassword(ctx, created.UID, newAcct.Password)
+	if err != nil {
+		return nil, err
+	}
+
 	return &api.CreatedAccount{UID: created.UID}, nil
 }

@@ -7,22 +7,20 @@ import (
 	"github.com/citwild/wfe/stores"
 	"github.com/citwild/wfe/stores/mock_stores"
 	"github.com/golang/mock/gomock"
-	"golang.org/x/net/context"
 )
 
 func TestCreate(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	ctx := context.Background()
-	mockAccounts := mock_stores.NewMockAccounts(ctrl)
-	ctx = stores.WithAccounts(ctx, mockAccounts)
+	ctx := newTestContext(ctrl)
 
-	login := "user"
-	password := "pass"
-	email := "mail@me.com"
+	accounts := stores.AccountsFromContext(ctx).(*mock_stores.MockAccounts)
+	accounts.EXPECT().Create(ctx, &api.User{Login: "me"}, &api.EmailAddr{Email: "e@mail.com"}).
+		Return(&api.User{UID: 123}, nil)
 
-	mockAccounts.EXPECT().Create(ctx, &api.User{Login: login}, &api.EmailAddr{Email: email}).Return(&api.User{UID: 123}, nil)
+	password := stores.PasswordFromContext(ctx).(*mock_stores.MockPassword)
+	password.EXPECT().SetPassword(ctx, int32(123), "pass").Return(nil)
 
-	Accounts.Create(ctx, &api.NewAccount{Login: login, Password: password, Email: email})
+	Accounts.Create(ctx, &api.NewAccount{Login: "me", Password: "pass", Email: "e@mail.com"})
 }
