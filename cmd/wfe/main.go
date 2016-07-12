@@ -7,6 +7,8 @@ import (
 	"log"
 	"net"
 	"os"
+	"github.com/citwild/wfe/api"
+	"github.com/citwild/wfe/services"
 )
 
 func init() {
@@ -89,5 +91,6 @@ The options are:
 	}
 
 	s := grpc.NewServer()
+	api.RegisterAccountsServer(s, services.Accounts)
 	s.Serve(lis)
 }
