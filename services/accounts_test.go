@@ -3,11 +3,11 @@ package services
 import (
 	"testing"
 
-	"github.com/golang/mock/gomock"
 	"github.com/citwild/wfe/api"
-	"golang.org/x/net/context"
-	"github.com/citwild/wfe/stores/mock_stores"
 	"github.com/citwild/wfe/stores"
+	"github.com/citwild/wfe/stores/mock_stores"
+	"github.com/golang/mock/gomock"
+	"golang.org/x/net/context"
 )
 
 func TestCreate(t *testing.T) {

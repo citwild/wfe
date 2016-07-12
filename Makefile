@@ -1,46 +1,20 @@
-.DEFAULT_GOAL := install
+pkgs = $(shell go list ./... | grep -v vendor)
 
-.PHONY: distclean generate test install wfe
+all: build test
 
-WFE_OS_NAME := $(shell uname -o 2>/dev/null || uname -s)
-
-ifeq "$(WFE_OS_NAME)" "Cygwin"
-	WFEOS := windows
-	CMD := cmd /C
-else
-	ifeq "$(WFE_OS_NAME)" "Msys"
-		WFEOS := windows
-		CMD := cmd //C
-	else
-		ifneq (,$(findstring MINGW, $(WFE_OS_NAME)))
-			WFEOS := windows
-			CMD := cmd //C
-		endif
-	endif
-endif
-
-ifndef GOBIN
-	ifeq "$(WFEOS)" "windows"
-		GOBIN := $(shell $(CMD) "echo %GOPATH%| cut -d';' -f1")
-		GOBIN := $(subst \,/,$(GOBIN))/bin
-	else
-        	GOBIN := $(shell echo $$GOPATH | cut -d':' -f1 )/bin
-	endif
-endif
-
-distclean:
-	go clean ./...
-	rm -rf ${GOBIN}/wfe
+format:
+	go fmt $(pkgs)
 
 generate:
-	go list ./... | xargs go generate
+	go generate $(pkgs)
+
+build:
+	go build $(pkgs)
 
 test: 
-	go list ./... | xargs go test
+	go test -race $(pkgs)
 
-install: wfe
-
-wfe: ${GOBIN}/wfe
-
-${GOBIN}/wfe: $(shell /usr/bin/find . -type f -and -name '*.go')
+install:
 	go install ./cmd/wfe
+
+.PHONY: all format generate build test install

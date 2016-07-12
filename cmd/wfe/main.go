@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
-	"log"
 	"google.golang.org/grpc"
+	"log"
 	"net"
+	"os"
 )
 
 func init() {

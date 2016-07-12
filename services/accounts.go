@@ -1,11 +1,11 @@
 package services
 
 import (
-	"golang.org/x/net/context"
 	"github.com/citwild/wfe/api"
+	"github.com/citwild/wfe/stores"
+	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"github.com/citwild/wfe/stores"
 )
 
 var Accounts api.AccountsServer = &accounts{}
@@ -29,5 +29,5 @@ func (s *accounts) Create(ctx context.Context, newAcct *api.NewAccount) (*api.Cr
 		return nil, err
 	}
 
-	return &api.CreatedAccount{UID: created.UID}, nil;
+	return &api.CreatedAccount{UID: created.UID}, nil
 }

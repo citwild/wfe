@@ -1,8 +1,8 @@
 package stores
 
 import (
-	"golang.org/x/net/context"
 	"github.com/citwild/wfe/api"
+	"golang.org/x/net/context"
 )
 
 type Accounts interface {
