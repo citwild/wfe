@@ -6,5 +6,5 @@ import (
 )
 
 type Accounts interface {
-	Create(ctx context.Context, newUser *api.User, email *api.EmailAddr) (*api.User, error)
+	Create(ctx context.Context, newUser *api.User, email *api.EmailAddress) (*api.User, error)
 }

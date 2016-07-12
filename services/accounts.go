@@ -19,9 +19,9 @@ func (s *accounts) Create(ctx context.Context, newAcct *api.NewAccount) (*api.Cr
 
 	newUser := &api.User{Login: newAcct.Login, UID: newAcct.UID}
 
-	var email *api.EmailAddr
+	var email *api.EmailAddress
 	if newAcct.Email != "" {
-		email = &api.EmailAddr{Email: newAcct.Email}
+		email = &api.EmailAddress{Email: newAcct.Email}
 	}
 
 	created, err := stores.AccountsFromContext(ctx).Create(ctx, newUser, email)

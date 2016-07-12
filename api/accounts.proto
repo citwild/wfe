@@ -7,7 +7,7 @@ message User {
     string Name = 3;
 }
 
-message EmailAddr {
+message EmailAddress {
     string Email = 1;
 }
 
@@ -20,8 +20,8 @@ message CreatedAccount {
 }
 
 message NewAccount {
-    string Login = 1;
-    string Email = 2;
-    string Password = 3;
-    int32 UID = 4;
+    int32 UID = 1;
+    string Login = 2;
+    string Email = 3;
+    string Password = 4;
 }

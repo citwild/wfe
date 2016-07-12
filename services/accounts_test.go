@@ -16,7 +16,7 @@ func TestCreate(t *testing.T) {
 	ctx := newTestContext(ctrl)
 
 	accounts := stores.AccountsFromContext(ctx).(*mock_stores.MockAccounts)
-	accounts.EXPECT().Create(ctx, &api.User{Login: "me"}, &api.EmailAddr{Email: "e@mail.com"}).
+	accounts.EXPECT().Create(ctx, &api.User{Login: "me"}, &api.EmailAddress{Email: "e@mail.com"}).
 		Return(&api.User{UID: 123}, nil)
 
 	password := stores.PasswordFromContext(ctx).(*mock_stores.MockPassword)

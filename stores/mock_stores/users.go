@@ -30,7 +30,7 @@ func (_m *MockAccounts) EXPECT() *_MockAccountsRecorder {
 	return _m.recorder
 }
 
-func (_m *MockAccounts) Create(_param0 context.Context, _param1 *api.User, _param2 *api.EmailAddr) (*api.User, error) {
+func (_m *MockAccounts) Create(_param0 context.Context, _param1 *api.User, _param2 *api.EmailAddress) (*api.User, error) {
 	ret := _m.ctrl.Call(_m, "Create", _param0, _param1, _param2)
 	ret0, _ := ret[0].(*api.User)
 	ret1, _ := ret[1].(error)
