@@ -1,5 +1,5 @@
 syntax = "proto3";
-package wfe;
+package api;
 
 message User {
     int32 UID = 1;
