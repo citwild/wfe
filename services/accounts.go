@@ -1,11 +1,11 @@
-package service
+package services
 
 import (
 	"golang.org/x/net/context"
 	"github.com/citwild/wfe/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"github.com/citwild/wfe/store"
+	"github.com/citwild/wfe/stores"
 )
 
 var Accounts api.AccountsServer = &accounts{}
@@ -24,7 +24,7 @@ func (s *accounts) Create(ctx context.Context, newAcct *api.NewAccount) (*api.Cr
 		email = &api.EmailAddr{Email: newAcct.Email}
 	}
 
-	created, err := store.AccountsFromContext(ctx).Create(ctx, newUser, email)
+	created, err := stores.AccountsFromContext(ctx).Create(ctx, newUser, email)
 	if err != nil {
 		return nil, err
 	}

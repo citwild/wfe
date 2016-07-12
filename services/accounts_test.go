@@ -1,4 +1,4 @@
-package service
+package services
 
 import (
 	"testing"
@@ -6,8 +6,8 @@ import (
 	"github.com/golang/mock/gomock"
 	"github.com/citwild/wfe/api"
 	"golang.org/x/net/context"
-	"github.com/citwild/wfe/store/mock_store"
-	"github.com/citwild/wfe/store"
+	"github.com/citwild/wfe/stores/mock_stores"
+	"github.com/citwild/wfe/stores"
 )
 
 func TestCreate(t *testing.T) {
@@ -15,8 +15,8 @@ func TestCreate(t *testing.T) {
 	defer ctrl.Finish()
 
 	ctx := context.Background()
-	mockAccounts := mock_store.NewMockAccounts(ctrl)
-	ctx = store.WithAccounts(ctx, mockAccounts)
+	mockAccounts := mock_stores.NewMockAccounts(ctrl)
+	ctx = stores.WithAccounts(ctx, mockAccounts)
 
 	login := "user"
 	password := "pass"

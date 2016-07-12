@@ -1,4 +1,4 @@
-package store
+package stores
 
 import (
 	"golang.org/x/net/context"
