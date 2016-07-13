@@ -2,26 +2,26 @@ syntax = "proto3";
 package api;
 
 message User {
-    int32 UID = 1;
-    string Login = 2;
-    string Name = 3;
+	int32 UID = 1;
+	string Login = 2;
+	string Name = 3;
 }
 
 message EmailAddress {
-    string Email = 1;
+	string Email = 1;
 }
 
 service Accounts {
-    rpc Create(NewAccount) returns (CreatedAccount);
+	rpc Create(NewAccount) returns (CreatedAccount);
 }
 
 message CreatedAccount {
-    int32 UID = 1;
+	int32 UID = 1;
 }
 
 message NewAccount {
-    int32 UID = 1;
-    string Login = 2;
-    string Email = 3;
-    string Password = 4;
+	int32 UID = 1;
+	string Login = 2;
+	string Email = 3;
+	string Password = 4;
 }
