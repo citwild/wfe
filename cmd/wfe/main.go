@@ -3,12 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/citwild/wfe/api"
+	"github.com/citwild/wfe/services"
+	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
 	"log"
 	"net"
+	"net/http"
 	"os"
-	"github.com/citwild/wfe/api"
-	"github.com/citwild/wfe/services"
 )
 
 func init() {
@@ -84,13 +86,27 @@ The options are:
 		fs.Usage()
 	}
 
-	log.Print("Listening on ", *httpAddr)
-	lis, err := net.Listen("tcp", *httpAddr)
+	// create main listener
+	l, err := net.Listen("tcp", *httpAddr)
 	if err != nil {
-		log.Fatal("Listen:", err)
+		log.Fatal(err)
 	}
 
-	s := grpc.NewServer()
-	api.RegisterAccountsServer(s, services.Accounts)
-	s.Serve(lis)
+	// create multiplexer
+	m := cmux.New(l)
+
+	// create sublisteners
+	grpcL := m.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
+	anyL := m.Match(cmux.Any())
+
+	grpcS := grpc.NewServer()
+	api.RegisterAccountsServer(grpcS, services.Accounts)
+
+	httpS := &http.Server{}
+
+	go grpcS.Serve(grpcL)
+	go httpS.Serve(anyL)
+
+	log.Print("Listening on ", *httpAddr)
+	m.Serve()
 }
