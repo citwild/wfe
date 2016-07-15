@@ -32,6 +32,14 @@ On Windows:
 %GOPATH%\bin\wfe -h
 ```
 
+## Certificate
+
+You can create a private key and self-signed certificate for testing via [openssl](https://www.openssl.org):
+
+```
+openssl req -new -x509 -nodes -out server.crt -keyout server.key
+```
+
 ## License
 
 The WFE web app is licensed under the [MIT License](https://opensource.org/licenses/MIT), which is an [open source license](https://opensource.org/docs/osd).
