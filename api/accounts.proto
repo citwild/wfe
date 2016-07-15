@@ -1,12 +1,6 @@
 syntax = "proto3";
 package api;
 
-message User {
-	int32 UID = 1;
-	string Login = 2;
-	string Name = 3;
-}
-
 message EmailAddress {
 	string Email = 1;
 }
