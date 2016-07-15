@@ -10,6 +10,6 @@ type password struct{}
 
 var _ stores.Password = (*password)(nil)
 
-func SetPassword(ctx context.Context, UID int32, password string) error {
+func (s password) SetPassword(ctx context.Context, UID int32, password string) error {
 	return errors.New("Not yet implemented")
 }
