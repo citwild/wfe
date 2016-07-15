@@ -6,7 +6,7 @@
 
 - [Go](https://golang.org/doc/install)
 
-Make sure you [set up your GOPATH](https://golang.org/doc/code.html#GOPATH). 
+Make sure you [set up your `GOPATH`](https://golang.org/doc/code.html#GOPATH). 
 
 ## Install
 
@@ -18,6 +18,18 @@ go get -u -v github.com/citwild/wfe/cmd/wfe
 
 ```
 wfe -h
+```
+
+Or, if the `GOBIN` directory is not in your `PATH`, on macOS and Linux:
+
+```
+$GOPATH/bin/wfe -h
+```
+
+On Windows:
+
+```
+%GOPATH%\bin\wfe -h
 ```
 
 ## License
