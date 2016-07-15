@@ -4,9 +4,7 @@
 
 ## Requirements
 
-- [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 - [Go](https://golang.org/doc/install)
-- [protoc](https://github.com/google/protobuf) (v3)
 
 Make sure you [set up your GOPATH](https://golang.org/doc/code.html#GOPATH). 
 
