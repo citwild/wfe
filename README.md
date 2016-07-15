@@ -10,17 +10,10 @@
 
 Make sure you [set up your GOPATH](https://golang.org/doc/code.html#GOPATH). 
 
-## Get
-
-```
-go get github.com/citwild/wfe
-```
-
 ## Install
 
 ```
-cd $GOPATH/src/github.com/citwild/wfe
-go install ./cmd/wfe
+go get -u -v github.com/citwild/wfe/cmd/wfe
 ```
 
 ## Use
