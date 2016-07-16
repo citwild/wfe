@@ -2,6 +2,9 @@ pkgs = $(shell go list ./... | grep -v vendor)
 
 all: build test
 
+get-deps:
+	go get ./...
+
 format:
 	go fmt $(pkgs)
 

@@ -1,2 +1,6 @@
 language: go
-go: 1.6
+go: 1.6.2
+
+install: make get-deps
+
+script: make test
