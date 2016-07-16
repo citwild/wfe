@@ -25,7 +25,7 @@ func init() {
 }
 
 type ServeCmd struct {
-	HTTPSAddr string `long:"https-addr" default:":3443" description:"HTTPS (TLS) listen address for app and gRPC API" env:"WFE_HTTPS_ADDR"`
+	HTTPSAddr string `long:"https-addr" default:":8443" description:"HTTPS (TLS) listen address for app and gRPC API" env:"WFE_HTTPS_ADDR"`
 
 	CertFile string `long:"tls-cert" description:"certificate file for TLS" env:"WFE_TLS_CERT" required:"yes"`
 	KeyFile  string `long:"tls-key" description:"key file for TLS" env:"WFE_TLS_KEY" required:"yes"`
@@ -55,18 +55,26 @@ func serveHTTPS(addr string, certFile string, keyFile string) error {
 		return err
 	}
 
+	// main server
 	srv := &http.Server{}
 	srv.TLSConfig = config
 
+	// gRPC API
 	grpcSrv := grpc.NewServer()
 	api.RegisterAccountsServer(grpcSrv, services.Accounts)
 
-	// multiplex connection between app and gRPC API
+	// web app
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintf(w, "Not yet implemented")
+	})
+
+	// multiplex connection between gRPC API and app
 	srv.Handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if strings.Contains(r.Header.Get("Content-Type"), "application/grpc") {
 			grpcSrv.ServeHTTP(w, r)
 		} else {
-			fmt.Fprintln(w, "Not yet implemented")
+			mux.ServeHTTP(w, r)
 		}
 	})
 
