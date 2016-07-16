@@ -1,4 +1,8 @@
-# Wide-Field Ethnography
+# Wide-Field Ethnography 
+
+[![Build Status](https://api.travis-ci.org/citwild/wfe.svg?branch=master)](https://travis-ci.org/citwild/wfe)
+[![Go Report Card](https://goreportcard.com/badge/github.com/citwild/wfe)](https://goreportcard.com/report/github.com/citwild/wfe)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 [Wide-field ethnography](http://depts.washington.edu/citw/wordpress/?page_id=55) web app. Currently a work-in-progress.
 
