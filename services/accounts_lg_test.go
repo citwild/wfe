@@ -1,8 +1,6 @@
 package services
 
 import (
-	"github.com/citwild/wfe/api"
-	"github.com/citwild/wfe/services/testserver"
 	"testing"
 )
 
