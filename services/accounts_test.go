@@ -22,5 +22,13 @@ func TestCreate(t *testing.T) {
 	password := stores.PasswordFromContext(ctx).(*mockstores.MockPassword)
 	password.EXPECT().SetPassword(ctx, int32(123), "pass")
 
-	Accounts.Create(ctx, &api.NewAccount{Login: "me", Password: "pass", Email: "e@mail.com"})
+	a, err := Accounts.Create(ctx, &api.NewAccount{Login: "me", Password: "pass", Email: "e@mail.com"})
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	w := &api.CreatedAccount{UID: 123}
+	if *a != *w {
+		t.Errorf("got %+v, want %+v", a, w)
+	}
 }
