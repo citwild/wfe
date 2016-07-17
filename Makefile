@@ -3,21 +3,34 @@ pkgs = $(shell go list ./... | grep -v vendor)
 all: build test
 
 get-deps:
-	go get ./...
+	@echo ">> getting dependencies"
+	@go get ./...
 
 format:
-	go fmt $(pkgs)
+	@echo ">> formatting code"
+	@go fmt $(pkgs)
+
+vet:
+	@echo ">> vetting code"
+	@go vet $(pkgs)
 
 generate:
-	go generate $(pkgs)
+	@echo ">> generating code"
+	@go generate $(pkgs)
 
 build:
-	go build $(pkgs)
+	@echo ">> building binaries"
+	@go build $(pkgs)
 
-test: 
-	go test -race $(pkgs)
+test:
+	@echo ">> running tests"
+	@go test -race $(pkgs)
 
 install:
-	go install ./cmd/wfe
+	@echo ">> installing binaries"
+	@go install ./cmd/wfe
 
-.PHONY: all format generate build test install
+precommit: vet
+	@gofmt -s -l $(pkgs)
+
+.PHONY: all get-deps format vet generate build test install
