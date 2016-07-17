@@ -3,13 +3,12 @@ package cli
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/citwild/wfe/api"
-	"github.com/citwild/wfe/services"
-	"google.golang.org/grpc"
 	"log"
 	"net/http"
-	"sourcegraph.com/sourcegraph/go-flags"
 	"strings"
+
+	"github.com/citwild/wfe/services/server"
+	"sourcegraph.com/sourcegraph/go-flags"
 )
 
 func init() {
@@ -60,13 +59,12 @@ func serveHTTPS(addr string, certFile string, keyFile string) error {
 	srv.TLSConfig = config
 
 	// gRPC API
-	grpcSrv := grpc.NewServer()
-	api.RegisterAccountsServer(grpcSrv, services.Accounts)
+	grpcSrv := server.New()
 
 	// web app
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Not yet implemented")
+		fmt.Fprintf(w, "Not yet implemented\n")
 	})
 
 	// multiplex connection between gRPC API and app
