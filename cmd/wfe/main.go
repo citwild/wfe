@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	err := cli.Main()
+	err := cli.Main(os.Args)
 	if err != nil {
 		os.Exit(1)
 	}

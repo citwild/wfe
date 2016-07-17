@@ -2,16 +2,15 @@ package cli
 
 import (
 	"log"
-	"os"
 	"sourcegraph.com/sourcegraph/go-flags"
 )
 
 var cmdInits []func(*flags.Parser)
 
-func Main() error {
+func Main(args []string) error {
 	log.SetFlags(0)
 
-	name := os.Args[0]
+	name := args[0]
 	parser := flags.NewNamedParser(name, flags.Default)
 	parser.LongDescription = name + " runs and manages a WFE instance."
 
