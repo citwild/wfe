@@ -1,6 +1,6 @@
 pkgs = $(shell go list ./... | grep -v vendor)
 
-all: build test
+all: build
 
 get-deps:
 	@echo ">> getting dependencies"
@@ -24,6 +24,10 @@ build:
 
 test:
 	@echo ">> running tests"
+	@go test -short -race $(pkgs)
+
+test-long: install
+	@echo ">> running tests long"
 	@go test -race $(pkgs)
 
 install:
@@ -33,4 +37,4 @@ install:
 precommit: vet
 	@gofmt -s -l $(pkgs)
 
-.PHONY: all get-deps format vet generate build test install
+.PHONY: all get-deps format vet generate build test test-long install precommit

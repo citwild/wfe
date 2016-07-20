@@ -25,7 +25,7 @@ go get -u -v github.com/citwild/wfe/cmd/wfe
 wfe -h
 ```
 
-Or, if the `GOBIN` directory is not in your `PATH`, on macOS and Linux:
+Or, if the `GOPATH`/bin directory is not in your `PATH`, on macOS and Linux:
 
 ```
 $GOPATH/bin/wfe -h
