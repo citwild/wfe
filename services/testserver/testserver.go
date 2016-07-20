@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"github.com/citwild/wfe/api"
 	"golang.org/x/net/context"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -15,7 +17,6 @@ import (
 )
 
 type TestServer struct {
-	Client  *api.Client
 	Context context.Context
 
 	serveCmd *exec.Cmd
@@ -42,6 +43,8 @@ func New() *TestServer {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	s.Context = context.Background()
 
 	cmd := exec.Command("wfe")
 	cmd.Args = append(cmd.Args, "serve")
@@ -79,6 +82,15 @@ func (s *TestServer) Start() error {
 	}
 
 	return nil
+}
+
+func (s *TestServer) NewClient() (*api.Client, error) {
+	cred := credentials.NewTLS(&tls.Config{InsecureSkipVerify: true})
+	conn, err := grpc.Dial("localhost:8443", grpc.WithTransportCredentials(cred))
+	if err != nil {
+		return nil, err
+	}
+	return api.NewClient(conn), nil
 }
 
 func (s *TestServer) Close() {

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"github.com/citwild/wfe/api"
 	"github.com/citwild/wfe/services/testserver"
 	"testing"
 )
@@ -19,5 +20,17 @@ func TestCreate_lg(t *testing.T) {
 	}
 	defer s.Close()
 
-	//s.Client.Accounts.Create(s.Context, &api.NewAccount{Login: "me", Password: "pass", Email: "e@mail.com"})
+	c, err := s.NewClient()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = c.Accounts.Create(s.Context, &api.NewAccount{Login: "me", Password: "pass", Email: "e@mail.com"})
+	//if err != nil {
+	//	t.Fatal(err)
+	//}
+	//
+	//if a == nil {
+	//	t.Errorf("expected created account != nil")
+	//}
 }
