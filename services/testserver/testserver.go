@@ -46,7 +46,13 @@ func New() *TestServer {
 
 	s.Context = context.Background()
 
-	cmd := exec.Command("wfe")
+	cmdPath := os.Getenv("GOPATH")
+	if cmdPath != "" {
+		cmdPath = filepath.Join(cmdPath, "bin")
+	}
+	cmdPath = filepath.Join(cmdPath, "wfe")
+
+	cmd := exec.Command(cmdPath)
 	cmd.Args = append(cmd.Args, "serve")
 	cmd.Args = append(cmd.Args, "--tls-key="+keyFile)
 	cmd.Args = append(cmd.Args, "--tls-cert="+certFile)
