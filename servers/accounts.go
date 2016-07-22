@@ -12,6 +12,10 @@ type AccountsServer struct{}
 
 var _ api.AccountsServer = (*AccountsServer)(nil)
 
+func NewAccountsServer() *AccountsServer {
+	return &AccountsServer{}
+}
+
 func (s *AccountsServer) Create(ctx context.Context, newAcct *api.NewAccount) (*api.CreatedAccount, error) {
 	if newAcct.Login == "" {
 		return nil, grpc.Errorf(codes.InvalidArgument, "empty login")

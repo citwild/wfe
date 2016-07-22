@@ -6,6 +6,6 @@ import (
 
 func NewServers() api.Servers {
 	return api.Servers{
-		Accounts: &AccountsServer{},
+		Accounts: NewAccountsServer(),
 	}
 }

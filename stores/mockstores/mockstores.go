@@ -5,7 +5,7 @@ import (
 	"github.com/golang/mock/gomock"
 )
 
-func NewMockStores(ctrl *gomock.Controller) stores.Stores {
+func NewStores(ctrl *gomock.Controller) stores.Stores {
 	return stores.Stores{
 		Accounts: NewMockAccountsStore(ctrl),
 		Password: NewMockPasswordStore(ctrl),

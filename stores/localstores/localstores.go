@@ -2,9 +2,9 @@ package localstores
 
 import "github.com/citwild/wfe/stores"
 
-func NewLocalStores() stores.Stores {
+func NewStores() stores.Stores {
 	return stores.Stores{
-		Accounts: &AccountsStore{},
-		Password: &PasswordStore{},
+		Accounts: NewAccountsStore(),
+		Password: NewPasswordStore(),
 	}
 }

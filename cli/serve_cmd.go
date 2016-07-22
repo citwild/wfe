@@ -62,7 +62,7 @@ func serveHTTPS(addr string, certFile string, keyFile string) error {
 
 	// gRPC API
 	srvs := servers.NewServers()
-	strs := localstores.NewLocalStores()
+	strs := localstores.NewStores()
 	inj := middleware.NewInjector(srvs, strs)
 	grpcSrv := api.NewServer(srvs, grpc.UnaryInterceptor(inj.Inject))
 

@@ -2,6 +2,7 @@ package testserver
 
 import (
 	"crypto/tls"
+	"errors"
 	"github.com/citwild/wfe/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -12,7 +13,6 @@ import (
 	"os/exec"
 	"path/filepath"
 	"time"
-	"errors"
 )
 
 type TestServer struct {
