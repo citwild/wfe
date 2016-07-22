@@ -3,13 +3,17 @@ package server
 import (
 	"github.com/citwild/wfe/api"
 	"github.com/citwild/wfe/services"
+	"github.com/citwild/wfe/services/internal/localstores"
 	"github.com/citwild/wfe/services/internal/middleware"
 	"google.golang.org/grpc"
 )
 
 func New() *grpc.Server {
-	s := grpc.NewServer(grpc.UnaryInterceptor(middleware.InitContext))
-	RegisterAll(s, services.NewServices())
+	svcs := services.NewServices()
+	strs := localstores.NewLocalStores()
+	i := middleware.NewInjector(svcs, strs)
+	s := grpc.NewServer(grpc.UnaryInterceptor(i.Inject))
+	RegisterAll(s, svcs)
 	return s
 }
 
