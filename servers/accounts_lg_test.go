@@ -1,8 +1,9 @@
-package services
+package servers
 
 import (
 	"github.com/citwild/wfe/api"
-	"github.com/citwild/wfe/services/testserver"
+	"github.com/citwild/wfe/test/testserver"
+	"golang.org/x/net/context"
 	"testing"
 )
 
@@ -25,7 +26,7 @@ func TestCreate_lg(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	_, err = c.Accounts.Create(s.Context, &api.NewAccount{Login: "me", Password: "pass", Email: "e@mail.com"})
+	_, err = c.Accounts.Create(context.Background(), &api.NewAccount{Login: "me", Password: "pass", Email: "e@mail.com"})
 	//if err != nil {
 	//	t.Fatal(err)
 	//}

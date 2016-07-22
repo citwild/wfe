@@ -1,4 +1,4 @@
-package services
+package servers
 
 import (
 	"github.com/citwild/wfe/api"
@@ -8,11 +8,11 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-type accounts struct{}
+type AccountsServer struct{}
 
-var _ api.AccountsServer = (*accounts)(nil)
+var _ api.AccountsServer = (*AccountsServer)(nil)
 
-func (s *accounts) Create(ctx context.Context, newAcct *api.NewAccount) (*api.CreatedAccount, error) {
+func (s *AccountsServer) Create(ctx context.Context, newAcct *api.NewAccount) (*api.CreatedAccount, error) {
 	if newAcct.Login == "" {
 		return nil, grpc.Errorf(codes.InvalidArgument, "empty login")
 	}

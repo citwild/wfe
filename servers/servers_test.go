@@ -1,4 +1,4 @@
-package services
+package servers
 
 import (
 	"github.com/citwild/wfe/stores"
@@ -9,7 +9,7 @@ import (
 
 func newTestContext(ctrl *gomock.Controller) context.Context {
 	ctx := context.Background()
-	ctx = WithServices(ctx, NewServices())
+	ctx = WithServers(ctx, NewServers())
 	ctx = stores.WithStores(ctx, mockstores.NewMockStores(ctrl))
 	return ctx
 }

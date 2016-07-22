@@ -2,9 +2,7 @@ package testserver
 
 import (
 	"crypto/tls"
-	"fmt"
 	"github.com/citwild/wfe/api"
-	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"io/ioutil"
@@ -14,11 +12,10 @@ import (
 	"os/exec"
 	"path/filepath"
 	"time"
+	"errors"
 )
 
 type TestServer struct {
-	Context context.Context
-
 	serveCmd *exec.Cmd
 	tempDir  string
 }
@@ -43,8 +40,6 @@ func New() *TestServer {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	s.Context = context.Background()
 
 	cmdPath := os.Getenv("GOPATH")
 	if cmdPath != "" {
@@ -82,7 +77,7 @@ func (s *TestServer) Start() error {
 		}
 		if time.Since(start) > timeout {
 			s.Close()
-			return fmt.Errorf("timed out waiting for server to start")
+			return errors.New("timed out waiting for server to start")
 		}
 		time.Sleep(1000 * time.Millisecond)
 	}

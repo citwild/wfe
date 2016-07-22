@@ -1,4 +1,4 @@
-package services
+package servers
 
 import (
 	"github.com/citwild/wfe/api"
@@ -11,7 +11,7 @@ const (
 	accountsKey key = iota
 )
 
-func WithServices(ctx context.Context, s Services) context.Context {
+func WithServers(ctx context.Context, s api.Servers) context.Context {
 	if s.Accounts != nil {
 		ctx = WithAccounts(ctx, s.Accounts)
 	}
