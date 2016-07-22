@@ -8,9 +8,9 @@ import (
 	"google.golang.org/grpc/codes"
 )
 
-var Accounts api.AccountsServer = &accounts{}
-
 type accounts struct{}
+
+var _ api.AccountsServer = (*accounts)(nil)
 
 func (s *accounts) Create(ctx context.Context, newAcct *api.NewAccount) (*api.CreatedAccount, error) {
 	if newAcct.Login == "" {
@@ -24,12 +24,12 @@ func (s *accounts) Create(ctx context.Context, newAcct *api.NewAccount) (*api.Cr
 		email = &api.EmailAddress{Email: newAcct.Email}
 	}
 
-	created, err := stores.AccountsFromContext(ctx).Create(ctx, newUser, email)
+	created, err := stores.Accounts(ctx).Create(ctx, newUser, email)
 	if err != nil {
 		return nil, err
 	}
 
-	err = stores.PasswordFromContext(ctx).SetPassword(ctx, created.UID, newAcct.Password)
+	err = stores.Password(ctx).SetPassword(ctx, created.UID, newAcct.Password)
 	if err != nil {
 		return nil, err
 	}

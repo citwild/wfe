@@ -5,6 +5,6 @@ import (
 	"golang.org/x/net/context"
 )
 
-type Accounts interface {
+type AccountsStore interface {
 	Create(ctx context.Context, newUser *api.User, email *api.EmailAddress) (*api.User, error)
 }

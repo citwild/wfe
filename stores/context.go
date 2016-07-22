@@ -5,28 +5,38 @@ import "golang.org/x/net/context"
 type key int
 
 const (
-	accountKey key = iota
+	accountsKey key = iota
 	passwordKey
 )
 
-func WithAccounts(ctx context.Context, s Accounts) context.Context {
-	return context.WithValue(ctx, accountKey, s)
+func WithStores(ctx context.Context, s Stores) context.Context {
+	if s.Accounts != nil {
+		ctx = WithAccounts(ctx, s.Accounts)
+	}
+	if s.Password != nil {
+		ctx = WithPassword(ctx, s.Password)
+	}
+	return ctx
 }
 
-func AccountsFromContext(ctx context.Context) Accounts {
-	s, ok := ctx.Value(accountKey).(Accounts)
+func WithAccounts(ctx context.Context, s AccountsStore) context.Context {
+	return context.WithValue(ctx, accountsKey, s)
+}
+
+func Accounts(ctx context.Context) AccountsStore {
+	s, ok := ctx.Value(accountsKey).(AccountsStore)
 	if !ok || s == nil {
 		panic("no Accounts store set in context")
 	}
 	return s
 }
 
-func WithPassword(ctx context.Context, s Password) context.Context {
+func WithPassword(ctx context.Context, s PasswordStore) context.Context {
 	return context.WithValue(ctx, passwordKey, s)
 }
 
-func PasswordFromContext(ctx context.Context) Password {
-	s, ok := ctx.Value(passwordKey).(Password)
+func Password(ctx context.Context) PasswordStore {
+	s, ok := ctx.Value(passwordKey).(PasswordStore)
 	if !ok || s == nil {
 		panic("no Password store set in context")
 	}

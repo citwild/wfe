@@ -9,7 +9,7 @@ import (
 
 func newTestContext(ctrl *gomock.Controller) context.Context {
 	ctx := context.Background()
-	ctx = stores.WithAccounts(ctx, mockstores.NewMockAccounts(ctrl))
-	ctx = stores.WithPassword(ctx, mockstores.NewMockPassword(ctrl))
+	ctx = WithServices(ctx, NewServices())
+	ctx = stores.WithStores(ctx, mockstores.NewMockStores(ctrl))
 	return ctx
 }

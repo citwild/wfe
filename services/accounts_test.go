@@ -15,14 +15,14 @@ func TestCreate(t *testing.T) {
 
 	ctx := newTestContext(ctrl)
 
-	accounts := stores.AccountsFromContext(ctx).(*mockstores.MockAccounts)
+	accounts := stores.Accounts(ctx).(*mockstores.MockAccountsStore)
 	accounts.EXPECT().Create(ctx, &api.User{Login: "me"}, &api.EmailAddress{Email: "e@mail.com"}).
 		Return(&api.User{UID: 123}, nil)
 
-	password := stores.PasswordFromContext(ctx).(*mockstores.MockPassword)
+	password := stores.Password(ctx).(*mockstores.MockPasswordStore)
 	password.EXPECT().SetPassword(ctx, int32(123), "pass")
 
-	a, err := Accounts.Create(ctx, &api.NewAccount{Login: "me", Password: "pass", Email: "e@mail.com"})
+	a, err := Accounts(ctx).Create(ctx, &api.NewAccount{Login: "me", Password: "pass", Email: "e@mail.com"})
 	if err != nil {
 		t.Fatal(err)
 	}

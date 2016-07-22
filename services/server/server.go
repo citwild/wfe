@@ -9,6 +9,12 @@ import (
 
 func New() *grpc.Server {
 	s := grpc.NewServer(grpc.UnaryInterceptor(middleware.InitContext))
-	api.RegisterAccountsServer(s, services.Accounts)
+	RegisterAll(s, services.NewServices())
 	return s
+}
+
+func RegisterAll(s *grpc.Server, svcs services.Services) {
+	if svcs.Accounts != nil {
+		api.RegisterAccountsServer(s, svcs.Accounts)
+	}
 }

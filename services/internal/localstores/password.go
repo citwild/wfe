@@ -8,7 +8,7 @@ import (
 
 type password struct{}
 
-var _ stores.Password = (*password)(nil)
+var _ stores.PasswordStore = (*password)(nil)
 
 func (s password) SetPassword(ctx context.Context, UID int32, password string) error {
 	return errors.New("Not yet implemented")
