@@ -8,7 +8,7 @@ import (
 	"golang.org/x/net/context"
 )
 
-func newTestContext(ctrl *gomock.Controller) context.Context {
+func testContext(ctrl *gomock.Controller) context.Context {
 	ctx := context.Background()
 	ctx = WithServers(ctx, mockapi.NewServers(ctrl))
 	ctx = stores.WithStores(ctx, mockstores.NewStores(ctrl))

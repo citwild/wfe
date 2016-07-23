@@ -13,7 +13,7 @@ func TestCreate(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	ctx := newTestContext(ctrl)
+	ctx := testContext(ctrl)
 
 	acct := stores.Accounts(ctx).(*mockstores.MockAccountsStore)
 	acct.EXPECT().Create(ctx, &api.User{Login: "me"}, &api.EmailAddress{Email: "e@mail.com"}).
