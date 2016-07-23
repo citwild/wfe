@@ -4,7 +4,7 @@ all: build
 
 get-deps:
 	@echo ">> getting dependencies"
-	@go get ./...
+	@go get -u ./...
 
 format:
 	@echo ">> formatting code"
