@@ -4,9 +4,9 @@
 package mockstores
 
 import (
-	"github.com/citwild/wfe/api"
-	"github.com/golang/mock/gomock"
-	"golang.org/x/net/context"
+	api "github.com/citwild/wfe/api"
+	gomock "github.com/golang/mock/gomock"
+	context "golang.org/x/net/context"
 )
 
 // Mock of AccountsStore interface
