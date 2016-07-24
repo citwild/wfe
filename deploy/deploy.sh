@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
-# usage: ./deploy.sh staging f0478bd7c2f584b41a49405c91a439ce9d944657
+# usage: ./deploy.sh master 32d1f89fb6f65cc9d7a0d3573ff2c8217fa58c58
 # Based on code from https://gist.github.com/yefim/93fb5aa3291b3843353794127804976f
 
 PARENT_PATH=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
 cd "$PARENT_PATH"
 
-BRANCH=$1
-SHA1=$2
+BRANCH=${1:-$(git rev-parse --abbrev-ref HEAD)}
+SHA1=${2:-$(git rev-parse HEAD)}
 
 AWS_ACCOUNT_ID=827562370231
 NAME=wfe

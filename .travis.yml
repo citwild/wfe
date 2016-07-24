@@ -2,8 +2,17 @@ language: go
 go: tip
 sudo: required
 
+services:
+- docker
+
 install:
 - make get-deps
 
 script:
 - make test-long
+
+deploy:
+  provider: script
+  script: deploy/deploy.sh
+  on:
+    branch: master
