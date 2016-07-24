@@ -7,7 +7,7 @@ set -e
 PARENT_PATH=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
 cd "$PARENT_PATH"
 
-BRANCH=${1:-$(git symbolic-ref --short HEAD)}
+BRANCH=${1:-$(git rev-parse --abbrev-ref HEAD)}
 SHA1=${2:-$(git rev-parse HEAD)}
 
 AWS_ACCOUNT_ID=827562370231
