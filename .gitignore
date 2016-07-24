@@ -80,4 +80,6 @@ _testmain.go
 
 ### IntelliJ ###
 .idea
-*.iml
+
+### Docker ###
+/deploy/wfe

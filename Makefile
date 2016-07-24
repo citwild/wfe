@@ -1,6 +1,6 @@
 pkgs = $(shell go list ./... | grep -v vendor)
 
-all: build
+all: test
 
 get-deps:
 	@echo ">> getting dependencies"
@@ -18,10 +18,6 @@ generate:
 	@echo ">> generating code"
 	@go generate $(pkgs)
 
-build:
-	@echo ">> building binaries"
-	@go build $(pkgs)
-
 test:
 	@echo ">> running tests"
 	@go test -short -race $(pkgs)
@@ -34,7 +30,9 @@ install:
 	@echo ">> installing binaries"
 	@go install ./cmd/wfe
 
-precommit: vet
-	@gofmt -s -l $(pkgs)
+docker:
+	@echo ">> building docker image"
+	@go build -o ./deploy/wfe ./cmd/wfe
+	@docker build -t wfe -f deploy/Dockerfile deploy
 
-.PHONY: all get-deps format vet generate build test test-long install precommit
+.PHONY: all get-deps format vet generate test test-long install docker
