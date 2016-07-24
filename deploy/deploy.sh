@@ -1,18 +1,19 @@
 #!/usr/bin/env bash
 set -e
 
-# usage: ./deploy.sh master 32d1f89fb6f65cc9d7a0d3573ff2c8217fa58c58
+# usage: ./deploy.sh dev master 32d1f89fb6f65cc9d7a0d3573ff2c8217fa58c58
 # Based on code from https://gist.github.com/yefim/93fb5aa3291b3843353794127804976f
 
 PARENT_PATH=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
 cd "$PARENT_PATH"
 
-BRANCH=${1:-$(git rev-parse --abbrev-ref HEAD)}
-SHA1=${2:-$(git rev-parse HEAD)}
-
 AWS_ACCOUNT_ID=827562370231
 NAME=wfe
 EB_BUCKET=elasticbeanstalk-us-west-2-827562370231
+
+ENV_NAME=$NAME-${1:-dev}
+BRANCH=${2:-$(git rev-parse --abbrev-ref HEAD)}
+SHA1=${3:-$(git rev-parse HEAD)}
 
 VERSION=$BRANCH-$SHA1
 ZIP=$VERSION.zip
@@ -22,10 +23,10 @@ aws configure set default.region us-west-2
 # Authenticate against our Docker registry
 eval $(aws ecr get-login)
 
-# Build the wfe command for the docker context
+# Build the wfe command for the Docker context
 GOOS=linux GOARCH=amd64 go build -o wfe ././../cmd/wfe
 
-# Build and push the docker image
+# Build and push the Docker image
 docker build -t $NAME:$VERSION .
 docker tag $NAME:$VERSION $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$NAME:$VERSION
 docker push $AWS_ACCOUNT_ID.dkr.ecr.us-west-2.amazonaws.com/$NAME:$VERSION
@@ -47,5 +48,5 @@ aws elasticbeanstalk create-application-version --application-name $NAME \
     --version-label $VERSION --source-bundle S3Bucket=$EB_BUCKET,S3Key=$ZIP
 
 # Update the environment to use the new application version
-aws elasticbeanstalk update-environment --environment-name $NAME-dev \
+aws elasticbeanstalk update-environment --environment-name $ENV_NAME \
       --version-label $VERSION
