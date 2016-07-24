@@ -27,12 +27,7 @@ test-long: install
 	@go test -race $(pkgs)
 
 install:
-	@echo ">> installing binaries"
+	@echo ">> installing binary"
 	@go install ./cmd/wfe
 
-docker:
-	@echo ">> building docker image"
-	@go build -o ./deploy/wfe ./cmd/wfe
-	@docker build -t wfe -f deploy/Dockerfile deploy
-
-.PHONY: all get-deps format vet generate test test-long install docker
+.PHONY: all get-deps format vet generate test test-long install
