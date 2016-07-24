@@ -81,6 +81,7 @@ func serveHTTPS(addr string, certFile string, keyFile string) error {
 		}
 	})
 
+	log.Print("HTTPS running on ", addr)
 	go func() { log.Fatal(srv.Serve(lis)) }()
 
 	return nil
