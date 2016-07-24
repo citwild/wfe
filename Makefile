@@ -1,6 +1,6 @@
 pkgs = $(shell go list ./... | grep -v vendor)
 
-all: test
+all: get-deps test
 
 get-deps:
 	@echo ">> getting dependencies"
