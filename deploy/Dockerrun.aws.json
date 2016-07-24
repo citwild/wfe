@@ -8,5 +8,11 @@
     {
       "ContainerPort": "443"
     }
+  ],
+  "Volumes": [
+    {
+      "HostDirectory": "/etc/pki/tls/certs",
+      "ContainerDirectory": "/etc/pki/tls/certs"
+    }
   ]
 }
