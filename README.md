@@ -28,13 +28,13 @@ wfe -h
 Or, if the `GOPATH`/bin directory is not in your `PATH`, on macOS and Linux:
 
 ```
-$GOPATH/bin/wfe -h
+"$GOPATH"/bin/wfe -h
 ```
 
 On Windows:
 
 ```
-%GOPATH%\bin\wfe -h
+"%GOPATH%"\bin\wfe -h
 ```
 
 ## Certificate

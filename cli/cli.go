@@ -7,12 +7,11 @@ import (
 
 var cmdInits []func(*flags.Parser)
 
-func Main(args []string) error {
+func Main() error {
 	log.SetFlags(0)
 
-	name := args[0]
-	parser := flags.NewNamedParser(name, flags.Default)
-	parser.LongDescription = name + " runs and manages a WFE instance."
+	parser := flags.NewNamedParser("wfe", flags.Default)
+	parser.LongDescription = "wfe runs and manages a WFE instance."
 
 	for _, init := range cmdInits {
 		init(parser)
