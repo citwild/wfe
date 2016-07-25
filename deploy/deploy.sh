@@ -24,7 +24,9 @@ aws configure set default.region us-west-2
 eval $(aws ecr get-login)
 
 # Build the wfe command for the Docker context
-GOOS=linux GOARCH=amd64 go build ././../cmd/wfe
+GOOS=linux GOARCH=amd64 go build ./../cmd/wfe
+echo "Built wfe in: $PARENT_PATH"
+file "$PARENT_PATH/wfe"
 
 # Build and push the Docker image
 docker build -t $NAME:$VERSION .
