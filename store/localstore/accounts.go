@@ -1,15 +1,15 @@
-package localstores
+package localstore
 
 import (
 	"errors"
 	"github.com/citwild/wfe/api"
-	"github.com/citwild/wfe/stores"
+	"github.com/citwild/wfe/store"
 	"golang.org/x/net/context"
 )
 
 type AccountsStore struct{}
 
-var _ stores.AccountsStore = (*AccountsStore)(nil)
+var _ store.AccountsStore = (*AccountsStore)(nil)
 
 func NewAccountsStore() *AccountsStore {
 	return &AccountsStore{}

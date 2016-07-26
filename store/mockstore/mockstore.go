@@ -1,12 +1,12 @@
-package mockstores
+package mockstore
 
 import (
-	"github.com/citwild/wfe/stores"
+	"github.com/citwild/wfe/store"
 	"github.com/golang/mock/gomock"
 )
 
-func NewStores(ctrl *gomock.Controller) stores.Stores {
-	return stores.Stores{
+func NewStores(ctrl *gomock.Controller) store.Stores {
+	return store.Stores{
 		Accounts: NewMockAccountsStore(ctrl),
 		Password: NewMockPasswordStore(ctrl),
 	}

@@ -1,8 +1,8 @@
-package servers
+package service
 
 import (
 	"github.com/citwild/wfe/api"
-	"github.com/citwild/wfe/stores"
+	"github.com/citwild/wfe/store"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -28,12 +28,12 @@ func (s *AccountsServer) Create(ctx context.Context, newAcct *api.NewAccount) (*
 		email = &api.EmailAddress{Email: newAcct.Email}
 	}
 
-	created, err := stores.Accounts(ctx).Create(ctx, newUser, email)
+	created, err := store.Accounts(ctx).Create(ctx, newUser, email)
 	if err != nil {
 		return nil, err
 	}
 
-	err = stores.Password(ctx).SetPassword(ctx, created.UID, newAcct.Password)
+	err = store.Password(ctx).SetPassword(ctx, created.UID, newAcct.Password)
 	if err != nil {
 		return nil, err
 	}

@@ -1,4 +1,4 @@
-package stores
+package store
 
 type Stores struct {
 	Accounts AccountsStore

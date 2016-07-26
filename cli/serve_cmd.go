@@ -9,8 +9,8 @@ import (
 
 	"github.com/citwild/wfe/api"
 	"github.com/citwild/wfe/cli/internal/middleware"
-	"github.com/citwild/wfe/servers"
-	"github.com/citwild/wfe/stores/localstores"
+	"github.com/citwild/wfe/service"
+	"github.com/citwild/wfe/store/localstore"
 	"google.golang.org/grpc"
 	"sourcegraph.com/sourcegraph/go-flags"
 )
@@ -61,8 +61,8 @@ func serveHTTPS(addr string, certFile string, keyFile string) error {
 	srv.TLSConfig = config
 
 	// gRPC API
-	srvs := servers.NewServers()
-	strs := localstores.NewStores()
+	srvs := service.NewServers()
+	strs := localstore.NewStores()
 	inj := middleware.NewInjector(srvs, strs)
 	grpcSrv := api.NewServer(srvs, grpc.UnaryInterceptor(inj.Inject))
 
