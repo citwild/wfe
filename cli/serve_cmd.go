@@ -10,7 +10,7 @@ import (
 	"github.com/citwild/wfe/api"
 	"github.com/citwild/wfe/cli/internal/middleware"
 	"github.com/citwild/wfe/service"
-	"github.com/citwild/wfe/store/localstore"
+	"github.com/citwild/wfe/store/mongostore"
 	"github.com/soheilhy/cmux"
 	"google.golang.org/grpc"
 	"net"
@@ -41,7 +41,7 @@ func (c *ServeCmd) Execute(_ []string) error {
 	// gRPC API
 	grpcConfig := &grpcConfig{}
 	grpcConfig.servers = service.NewServers()
-	inj := middleware.NewInjector(grpcConfig.servers, localstore.NewStores())
+	inj := middleware.NewInjector(grpcConfig.servers, mongostore.NewStores())
 	grpcConfig.opts = []grpc.ServerOption{grpc.UnaryInterceptor(inj.Inject)}
 
 	// web app

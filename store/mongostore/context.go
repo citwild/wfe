@@ -1,4 +1,4 @@
-package localstore
+package mongostore
 
 import (
 	"golang.org/x/net/context"
@@ -11,7 +11,7 @@ const (
 	dbSessionKey key = iota
 )
 
-func WithDBSession(ctx context.Context, s *mgo.Session) {
+func WithDBSession(ctx context.Context, s *mgo.Session) context.Context {
 	return context.WithValue(ctx, dbSessionKey, s)
 }
 

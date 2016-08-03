@@ -1,4 +1,4 @@
-package localstore
+package mongostore
 
 import (
 	"errors"

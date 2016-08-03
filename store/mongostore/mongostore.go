@@ -1,4 +1,4 @@
-package localstore
+package mongostore
 
 import "github.com/citwild/wfe/store"
 
