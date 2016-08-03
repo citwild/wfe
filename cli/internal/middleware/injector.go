@@ -8,17 +8,16 @@ import (
 	"google.golang.org/grpc"
 )
 
-type Injector struct {
-	servers api.Servers
-	stores  store.Stores
+func NewUnaryServiceInjector(s api.Servers) grpc.UnaryServerInterceptor {
+	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (resp interface{}, err error) {
+		ctx = service.WithServers(ctx, s)
+		return next(ctx, req)
+	}
 }
 
-func NewInjector(srvs api.Servers, strs store.Stores) *Injector {
-	return &Injector{servers: srvs, stores: strs}
-}
-
-func (i *Injector) Inject(ctx context.Context, req interface{}, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (_ interface{}, _ error) {
-	ctx = service.WithServers(ctx, i.servers)
-	ctx = store.WithStores(ctx, i.stores)
-	return handler(ctx, req)
+func NewUnaryStoreInjector(s store.Stores) grpc.UnaryServerInterceptor {
+	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, next grpc.UnaryHandler) (resp interface{}, err error) {
+		ctx = store.WithStores(ctx, s)
+		return next(ctx, req)
+	}
 }
