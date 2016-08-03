@@ -8,17 +8,17 @@ import (
 type key int
 
 const (
-	dbSessionKey key = iota
+	sessionKey key = iota
 )
 
-func WithDBSession(ctx context.Context, s *mgo.Session) context.Context {
-	return context.WithValue(ctx, dbSessionKey, s)
+func WithSession(ctx context.Context, s *mgo.Session) context.Context {
+	return context.WithValue(ctx, sessionKey, s)
 }
 
-func DBSession(ctx context.Context) *mgo.Session {
-	s, ok := ctx.Value(dbSessionKey).(*mgo.Session)
+func Session(ctx context.Context) *mgo.Session {
+	s, ok := ctx.Value(sessionKey).(*mgo.Session)
 	if !ok || s == nil {
-		panic("no DB session set in context")
+		panic("no Session set in context")
 	}
 	return s
 }
