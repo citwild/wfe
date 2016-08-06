@@ -5,14 +5,17 @@ import (
 	"github.com/citwild/wfe/api"
 	"github.com/citwild/wfe/store"
 	"golang.org/x/net/context"
+	"gopkg.in/mgo.v2"
 )
 
-type AccountsStore struct{}
+type AccountsStore struct {
+	session *mgo.Session
+}
 
 var _ store.AccountsStore = (*AccountsStore)(nil)
 
-func NewAccountsStore() *AccountsStore {
-	return &AccountsStore{}
+func NewAccountsStore(s *mgo.Session) *AccountsStore {
+	return &AccountsStore{session: s}
 }
 
 func (s *AccountsStore) Create(ctx context.Context, newUser *api.User, email *api.EmailAddress) (*api.User, error) {

@@ -15,6 +15,7 @@ import (
 	"github.com/soheilhy/cmux"
 	"github.com/uber-go/zap"
 	"google.golang.org/grpc"
+	"gopkg.in/mgo.v2"
 	"net"
 	"sourcegraph.com/sourcegraph/go-flags"
 )
@@ -37,6 +38,8 @@ type ServeCmd struct {
 
 	CertFile string `long:"tls-cert" description:"certificate file for TLS" env:"WFE_TLS_CERT"`
 	KeyFile  string `long:"tls-key" description:"key file for TLS" env:"WFE_TLS_KEY"`
+
+	MGOHost string `long:"mgo-host" default:"localhost" description:"MongoDB host machine where the mongod or mongos is running" env:"WFE_MGO_HOST"`
 }
 
 func (c *ServeCmd) Execute(_ []string) error {
@@ -47,13 +50,20 @@ func (c *ServeCmd) Execute(_ []string) error {
 	}
 	log.Root().SetLevel(lvl)
 
+	// database
+	session, err := mgo.Dial(c.MGOHost)
+	if err != nil {
+		return err
+	}
+	defer session.Close()
+
 	// gRPC API
 	grpcConfig := &grpcConfig{}
 	grpcConfig.servers = service.NewServers()
 	grpcConfig.opts = []grpc.ServerOption{
 		grpc_middleware.WithUnaryServerChain(
 			middleware.NewUnaryServiceInjector(grpcConfig.servers),
-			middleware.NewUnaryStoreInjector(mongostore.NewStores())),
+			middleware.NewUnaryStoreInjector(mongostore.NewStores(session))),
 	}
 
 	// web app
