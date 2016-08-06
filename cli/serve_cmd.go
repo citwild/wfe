@@ -3,16 +3,17 @@ package cli
 import (
 	"crypto/tls"
 	"fmt"
-	"log"
 	"net/http"
 	"strings"
 
 	"github.com/citwild/wfe/api"
 	"github.com/citwild/wfe/cli/internal/middleware"
+	"github.com/citwild/wfe/log"
 	"github.com/citwild/wfe/service"
 	"github.com/citwild/wfe/store/mongostore"
 	"github.com/mwitkow/go-grpc-middleware"
 	"github.com/soheilhy/cmux"
+	"github.com/uber-go/zap"
 	"google.golang.org/grpc"
 	"net"
 	"sourcegraph.com/sourcegraph/go-flags"
@@ -25,7 +26,7 @@ func init() {
 			"Starts an HTTP server running the app and API.",
 			&ServeCmd{})
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("Failed to add serve command.", zap.Error(err))
 		}
 	})
 }
@@ -39,12 +40,21 @@ type ServeCmd struct {
 }
 
 func (c *ServeCmd) Execute(_ []string) error {
+	var lvl zap.Level
+	err := lvl.UnmarshalText([]byte(globalOpt.LogLevel))
+	if err != nil {
+		return err
+	}
+	log.Root().SetLevel(lvl)
+
 	// gRPC API
 	grpcConfig := &grpcConfig{}
 	grpcConfig.servers = service.NewServers()
-	svcInj := middleware.NewUnaryServiceInjector(grpcConfig.servers)
-	strInj := middleware.NewUnaryStoreInjector(mongostore.NewStores())
-	grpcConfig.opts = []grpc.ServerOption{grpc_middleware.WithUnaryServerChain(svcInj, strInj)}
+	grpcConfig.opts = []grpc.ServerOption{
+		grpc_middleware.WithUnaryServerChain(
+			middleware.NewUnaryServiceInjector(grpcConfig.servers),
+			middleware.NewUnaryStoreInjector(mongostore.NewStores())),
+	}
 
 	// web app
 	httpHandler := http.NewServeMux()
@@ -52,7 +62,7 @@ func (c *ServeCmd) Execute(_ []string) error {
 		fmt.Fprint(w, "Not yet implemented")
 	})
 
-	err := serveHTTP(c.HTTPAddr, grpcConfig, httpHandler)
+	err = serveHTTP(c.HTTPAddr, grpcConfig, httpHandler)
 	if err != nil {
 		return err
 	}
@@ -89,10 +99,10 @@ func serveHTTP(addr string, grpcConfig *grpcConfig, httpHandler http.Handler) er
 	grpcLis := mux.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
 	httpLis := mux.Match(cmux.Any())
 
-	log.Print("HTTP running on ", addr)
-	go func() { log.Fatal(grpcSrv.Serve(grpcLis)) }()
-	go func() { log.Fatal(httpSrv.Serve(httpLis)) }()
-	go func() { log.Fatal(mux.Serve()) }()
+	log.Debug("HTTP running.", zap.String("addr", addr))
+	go func() { log.Fatal("Failed to start grpc server.", zap.Error(grpcSrv.Serve(grpcLis))) }()
+	go func() { log.Fatal("Failed to start http server.", zap.Error(httpSrv.Serve(httpLis))) }()
+	go func() { log.Fatal("Failed to start main multiplexer.", zap.Error(mux.Serve())) }()
 
 	return nil
 }
@@ -126,8 +136,8 @@ func serveHTTPS(addr string, grpcConfig *grpcConfig, httpHandler http.Handler, c
 		}
 	})
 
-	log.Print("HTTPS running on ", addr)
-	go func() { log.Fatal(srv.Serve(lis)) }()
+	log.Debug("HTTPS running.", zap.String("addr", addr))
+	go func() { log.Fatal("Failed to start https server.", zap.Error(srv.Serve(lis))) }()
 
 	return nil
 }

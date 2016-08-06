@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"log"
 	"sourcegraph.com/sourcegraph/go-flags"
 )
 
@@ -12,9 +11,6 @@ var globalOpt struct {
 }
 
 func Main() error {
-	log.SetFlags(0)
-	log.SetPrefix("")
-
 	parser := flags.NewNamedParser("wfe", flags.Default)
 	parser.LongDescription = "wfe runs and manages a WFE instance."
 	parser.AddGroup("Global options", "", &globalOpt)
