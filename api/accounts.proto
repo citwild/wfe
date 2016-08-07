@@ -10,12 +10,11 @@ service Accounts {
 }
 
 message CreatedAccount {
-	int32 UID = 1;
+	string ID = 1;
 }
 
 message NewAccount {
-	int32 UID = 1;
-	string Login = 2;
-	string Email = 3;
-	string Password = 4;
+	string Login = 1;
+	string Email = 2;
+	string Password = 3;
 }

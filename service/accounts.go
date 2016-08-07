@@ -3,9 +3,11 @@ package service
 import (
 	"github.com/citwild/wfe/api"
 	"github.com/citwild/wfe/store"
+	"github.com/golang/protobuf/ptypes/timestamp"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"time"
 )
 
 type AccountsServer struct{}
@@ -21,7 +23,12 @@ func (s *AccountsServer) Create(ctx context.Context, newAcct *api.NewAccount) (*
 		return nil, grpc.Errorf(codes.InvalidArgument, "empty login")
 	}
 
-	newUser := &api.User{Login: newAcct.Login, UID: newAcct.UID}
+	t := time.Now()
+	now := timestamp.Timestamp{Seconds: int64(t.Second()), Nanos: int32(t.Nanosecond())}
+	newUser := &api.User{
+		Login:        newAcct.Login,
+		RegisteredAt: &now,
+	}
 
 	var email *api.EmailAddress
 	if newAcct.Email != "" {
@@ -33,10 +40,10 @@ func (s *AccountsServer) Create(ctx context.Context, newAcct *api.NewAccount) (*
 		return nil, err
 	}
 
-	err = store.Password(ctx).SetPassword(ctx, created.UID, newAcct.Password)
+	err = store.Password(ctx).SetPassword(ctx, created.ID, newAcct.Password)
 	if err != nil {
 		return nil, err
 	}
 
-	return &api.CreatedAccount{UID: created.UID}, nil
+	return &api.CreatedAccount{ID: created.ID}, nil
 }

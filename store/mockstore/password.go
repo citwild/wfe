@@ -29,7 +29,7 @@ func (_m *MockPasswordStore) EXPECT() *_MockPasswordStoreRecorder {
 	return _m.recorder
 }
 
-func (_m *MockPasswordStore) SetPassword(_param0 context.Context, _param1 int32, _param2 string) error {
+func (_m *MockPasswordStore) SetPassword(_param0 context.Context, _param1 string, _param2 string) error {
 	ret := _m.ctrl.Call(_m, "SetPassword", _param0, _param1, _param2)
 	ret0, _ := ret[0].(error)
 	return ret0

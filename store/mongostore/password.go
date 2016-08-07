@@ -17,6 +17,6 @@ func NewPasswordStore(s *mgo.Session) *PasswordStore {
 	return &PasswordStore{session: s}
 }
 
-func (s PasswordStore) SetPassword(ctx context.Context, UID int32, password string) error {
+func (s PasswordStore) SetPassword(ctx context.Context, ID string, password string) error {
 	return errors.New("Not yet implemented")
 }

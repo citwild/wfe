@@ -1,7 +1,6 @@
 package mongostore
 
 import (
-	"errors"
 	"github.com/citwild/wfe/api"
 	"github.com/citwild/wfe/store"
 	"golang.org/x/net/context"
@@ -19,5 +18,17 @@ func NewAccountsStore(s *mgo.Session) *AccountsStore {
 }
 
 func (s *AccountsStore) Create(ctx context.Context, newUser *api.User, email *api.EmailAddress) (*api.User, error) {
-	return nil, errors.New("Not yet implemented")
+	db := newDB(s.session)
+
+	var u dbUser
+	u.fromUser(newUser)
+
+	err := db.C("users").Insert(&u)
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO: insert email
+
+	return u.toUser(), nil
 }

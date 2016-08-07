@@ -16,18 +16,18 @@ func TestCreate(t *testing.T) {
 	ctx := testContext(ctrl)
 
 	acct := store.Accounts(ctx).(*mockstore.MockAccountsStore)
-	acct.EXPECT().Create(ctx, &api.User{Login: "me"}, &api.EmailAddress{Email: "e@mail.com"}).
-		Return(&api.User{UID: 123}, nil)
+	acct.EXPECT().Create(ctx, gomock.Any(), &api.EmailAddress{Email: "e@mail.com"}).
+		Return(&api.User{ID: "id"}, nil)
 
 	pass := store.Password(ctx).(*mockstore.MockPasswordStore)
-	pass.EXPECT().SetPassword(ctx, int32(123), "pass")
+	pass.EXPECT().SetPassword(ctx, "id", "pass")
 
 	actual, err := NewAccountsServer().Create(ctx, &api.NewAccount{Login: "me", Password: "pass", Email: "e@mail.com"})
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	expected := &api.CreatedAccount{UID: 123}
+	expected := &api.CreatedAccount{ID: "id"}
 	if *actual != *expected {
 		t.Errorf("Account: expected %+v, actual %+v", expected, actual)
 	}
