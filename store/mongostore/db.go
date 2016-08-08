@@ -2,6 +2,8 @@ package mongostore
 
 import "gopkg.in/mgo.v2"
 
+const dbName = "wfe"
+
 type db struct {
 	session *mgo.Session
 }
@@ -15,5 +17,5 @@ func (d *db) Close() {
 }
 
 func (d *db) C(name string) *mgo.Collection {
-	return d.session.DB("wfe").C(name)
+	return d.session.DB(dbName).C(name)
 }

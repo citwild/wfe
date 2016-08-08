@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/citwild/wfe/api"
 	"github.com/citwild/wfe/log"
+	"github.com/citwild/wfe/test/testdb"
 	"github.com/uber-go/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -19,6 +20,7 @@ import (
 type TestServer struct {
 	serveCmd *exec.Cmd
 	tempDir  string
+	testDB   *testdb.TestDB
 }
 
 func New() *TestServer {
@@ -48,6 +50,8 @@ func New() *TestServer {
 	}
 	cmdPath = filepath.Join(cmdPath, "wfe")
 
+	s.testDB = testdb.New()
+
 	cmd := exec.Command(cmdPath)
 	cmd.Args = append(cmd.Args, "serve")
 	cmd.Args = append(cmd.Args, "--tls-key="+keyFile)
@@ -58,7 +62,13 @@ func New() *TestServer {
 }
 
 func (s *TestServer) Start() error {
-	err := s.serveCmd.Start()
+	err := s.testDB.Start()
+	if err != nil {
+		s.testDB.Close()
+		return err
+	}
+
+	err = s.serveCmd.Start()
 	if err != nil {
 		return err
 	}
@@ -69,7 +79,7 @@ func (s *TestServer) Start() error {
 	}
 	client := &http.Client{Transport: tr}
 
-	const timeout = 5 * time.Second
+	const timeout = 10 * time.Second
 	start := time.Now()
 	for true {
 		_, err := client.Get("https://localhost:8443")
@@ -78,7 +88,7 @@ func (s *TestServer) Start() error {
 		}
 		if time.Since(start) > timeout {
 			s.Close()
-			return errors.New("timed out waiting for server to start")
+			return errors.New("Timed out waiting for server to start")
 		}
 		time.Sleep(1000 * time.Millisecond)
 	}
@@ -105,6 +115,8 @@ func (s *TestServer) Close() {
 	if err != nil {
 		log.Fatal("Failed to delete temp dir.", zap.Error(err))
 	}
+
+	s.testDB.Close()
 }
 
 const localhostKey = `

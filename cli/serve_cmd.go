@@ -109,7 +109,7 @@ func serveHTTP(addr string, grpcConfig *grpcConfig, httpHandler http.Handler) er
 	grpcLis := mux.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
 	httpLis := mux.Match(cmux.Any())
 
-	log.Debug("HTTP running.", zap.String("addr", addr))
+	log.Info("HTTP running.", zap.String("addr", addr))
 	go func() { log.Fatal("Failed to start grpc server.", zap.Error(grpcSrv.Serve(grpcLis))) }()
 	go func() { log.Fatal("Failed to start http server.", zap.Error(httpSrv.Serve(httpLis))) }()
 	go func() { log.Fatal("Failed to start main multiplexer.", zap.Error(mux.Serve())) }()
@@ -146,7 +146,7 @@ func serveHTTPS(addr string, grpcConfig *grpcConfig, httpHandler http.Handler, c
 		}
 	})
 
-	log.Debug("HTTPS running.", zap.String("addr", addr))
+	log.Info("HTTPS running.", zap.String("addr", addr))
 	go func() { log.Fatal("Failed to start https server.", zap.Error(srv.Serve(lis))) }()
 
 	return nil
