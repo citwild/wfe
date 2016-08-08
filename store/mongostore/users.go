@@ -14,14 +14,14 @@ type dbUser struct {
 }
 
 func (du *dbUser) fromUser(u *api.User) {
-	du.ID = bson.ObjectIdHex(u.ID)
+	du.ID = bson.ObjectId(u.ID)
 	du.Login = u.Login
 	du.Name = u.Name
 }
 
 func (du *dbUser) toUser() *api.User {
 	return &api.User{
-		ID:    du.ID.Hex(),
+		ID:    string(du.ID),
 		Login: du.Login,
 		Name:  du.Name,
 	}

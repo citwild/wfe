@@ -3,8 +3,10 @@ package testdb
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"github.com/citwild/wfe/log"
 	"github.com/uber-go/zap"
+	"gopkg.in/mgo.v2"
 	"net"
 	"os/exec"
 	"strings"
@@ -14,6 +16,7 @@ import (
 const mongoImage = "mvertes/alpine-mongo"
 
 type TestDB struct {
+	Address     string
 	containerId string
 }
 
@@ -43,9 +46,9 @@ func New() *TestDB {
 }
 
 func (d *TestDB) Start() error {
-	out, err := exec.Command("docker", "run", "-d", "-p", "27017:27017", mongoImage).Output()
+	out, err := exec.Command("docker", "run", "-d", "-P", mongoImage).Output()
 	if err != nil {
-		return err
+		return fmt.Errorf("Failed on `docker run`: %v", err)
 	}
 
 	d.containerId = strings.TrimSpace(string(out))
@@ -53,10 +56,21 @@ func (d *TestDB) Start() error {
 		errors.New("Unexpected empty output from `docker run`")
 	}
 
+	out, err = exec.Command("docker", "port", d.containerId, "27017/tcp").Output()
+	if err != nil {
+		d.Close()
+		return err
+	}
+
+	d.Address = strings.TrimSpace(string(out))
+	if d.Address == "" {
+		errors.New("Unexpected empty output from `docker port`")
+	}
+
 	const timeout = 10 * time.Second
 	start := time.Now()
 	for true {
-		c, err := net.Dial("tcp", ":27017")
+		c, err := net.Dial("tcp", d.Address)
 		if err == nil {
 			c.Close()
 			break
@@ -73,4 +87,12 @@ func (d *TestDB) Start() error {
 
 func (d *TestDB) Close() {
 	exec.Command("docker", "kill", d.containerId).Run()
+}
+
+func (d *TestDB) NewSession() (*mgo.Session, error) {
+	s, err := mgo.Dial(d.Address)
+	if err != nil {
+		return nil, err
+	}
+	return s, nil
 }

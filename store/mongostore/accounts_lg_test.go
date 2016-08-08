@@ -2,6 +2,7 @@ package mongostore
 
 import (
 	"github.com/citwild/wfe/api"
+	"github.com/citwild/wfe/test/testdb"
 	"github.com/golang/mock/gomock"
 	"testing"
 )
@@ -13,6 +14,18 @@ func TestCreate_lg(t *testing.T) {
 
 	t.Parallel()
 
+	db := testdb.New()
+	err := db.Start()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer db.Close()
+
+	s, err := db.NewSession()
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
@@ -21,7 +34,7 @@ func TestCreate_lg(t *testing.T) {
 	user := &api.User{Login: "me", Name: "my name"}
 	email := &api.EmailAddress{Email: "e@mail.com"}
 
-	actual, err := NewAccountsStore(nil).Create(ctx, user, email)
+	actual, err := NewAccountsStore(s).Create(ctx, user, email)
 	if err != nil {
 		t.Fatal(err)
 	}

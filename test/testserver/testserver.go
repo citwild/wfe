@@ -68,6 +68,7 @@ func (s *TestServer) Start() error {
 		return err
 	}
 
+	s.serveCmd.Args = append(s.serveCmd.Args, "--mgo-host="+s.testDB.Address)
 	err = s.serveCmd.Start()
 	if err != nil {
 		return err
@@ -96,15 +97,6 @@ func (s *TestServer) Start() error {
 	return nil
 }
 
-func (s *TestServer) NewClient() (*api.Client, error) {
-	cred := credentials.NewTLS(&tls.Config{InsecureSkipVerify: true})
-	conn, err := grpc.Dial("localhost:8443", grpc.WithTransportCredentials(cred))
-	if err != nil {
-		return nil, err
-	}
-	return api.NewClient(conn), nil
-}
-
 func (s *TestServer) Close() {
 	err := s.serveCmd.Process.Kill()
 	if err != nil {
@@ -117,6 +109,15 @@ func (s *TestServer) Close() {
 	}
 
 	s.testDB.Close()
+}
+
+func (s *TestServer) NewClient() (*api.Client, error) {
+	cred := credentials.NewTLS(&tls.Config{InsecureSkipVerify: true})
+	conn, err := grpc.Dial("localhost:8443", grpc.WithTransportCredentials(cred))
+	if err != nil {
+		return nil, err
+	}
+	return api.NewClient(conn), nil
 }
 
 const localhostKey = `
