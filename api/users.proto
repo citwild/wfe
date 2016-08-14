@@ -9,3 +9,8 @@ message User {
 	string Name = 3;
 	google.protobuf.Timestamp RegisteredAt = 4;
 }
+
+message UserSpec {
+	string Login = 1;
+	string ID = 2;
+}

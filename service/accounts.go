@@ -3,7 +3,7 @@ package service
 import (
 	"github.com/citwild/wfe/api"
 	"github.com/citwild/wfe/store"
-	"github.com/golang/protobuf/ptypes/timestamp"
+	"github.com/golang/protobuf/ptypes"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -23,11 +23,10 @@ func (s *AccountsServer) Create(ctx context.Context, newAcct *api.NewAccount) (*
 		return nil, grpc.Errorf(codes.InvalidArgument, "empty login")
 	}
 
-	t := time.Now()
-	now := timestamp.Timestamp{Seconds: int64(t.Second()), Nanos: int32(t.Nanosecond())}
+	now, _ := ptypes.TimestampProto(time.Now())
 	newUser := &api.User{
 		Login:        newAcct.Login,
-		RegisteredAt: &now,
+		RegisteredAt: now,
 	}
 
 	var email *api.EmailAddress

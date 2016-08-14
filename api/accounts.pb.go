@@ -14,6 +14,7 @@ It has these top-level messages:
 	CreatedAccount
 	NewAccount
 	User
+	UserSpec
 */
 package api
 

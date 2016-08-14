@@ -7,6 +7,8 @@ import (
 	"github.com/citwild/wfe/store"
 	"github.com/citwild/wfe/store/mockstore"
 	"github.com/golang/mock/gomock"
+	"github.com/golang/protobuf/ptypes"
+	"time"
 )
 
 func TestCreate(t *testing.T) {
@@ -30,5 +32,16 @@ func TestCreate(t *testing.T) {
 	expected := &api.CreatedAccount{ID: "id"}
 	if *actual != *expected {
 		t.Errorf("Account: expected %+v, actual %+v", expected, actual)
+	}
+}
+
+func TestTimestamp(t *testing.T) {
+	tm := time.Now()
+	ts, _ := ptypes.TimestampProto(tm)
+	tm2, _ := ptypes.Timestamp(ts)
+	ts2, _ := ptypes.TimestampProto(tm2)
+
+	if ts.Nanos != ts2.Nanos {
+		t.Errorf("expected %v, actual %v", tm.Nanosecond(), tm2.Nanosecond())
 	}
 }
