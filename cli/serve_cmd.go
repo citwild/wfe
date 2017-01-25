@@ -48,7 +48,7 @@ func (c *ServeCmd) Execute(_ []string) error {
 	if err != nil {
 		return err
 	}
-	log.Root().SetLevel(lvl)
+	zap.DynamicLevel().SetLevel(lvl)
 
 	// database
 	session, err := mgo.Dial(c.MGOHost)

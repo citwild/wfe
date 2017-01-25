@@ -19,6 +19,6 @@ func (e *UserNotFoundError) Error() string {
 	if e.Login != "" {
 		return fmt.Sprintf("user %s not found", e.Login)
 	} else {
-		return fmt.Sprintf("user #%d not found", e.ID)
+		return fmt.Sprintf("user %s not found", e.ID)
 	}
 }

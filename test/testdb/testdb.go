@@ -53,7 +53,7 @@ func (d *TestDB) Start() error {
 
 	d.containerId = strings.TrimSpace(string(out))
 	if d.containerId == "" {
-		errors.New("Unexpected empty output from `docker run`")
+		return errors.New("Unexpected empty output from `docker run`")
 	}
 
 	out, err = exec.Command("docker", "port", d.containerId, "27017/tcp").Output()
@@ -64,7 +64,7 @@ func (d *TestDB) Start() error {
 
 	d.Address = strings.TrimSpace(string(out))
 	if d.Address == "" {
-		errors.New("Unexpected empty output from `docker port`")
+		return errors.New("Unexpected empty output from `docker port`")
 	}
 
 	const timeout = 10 * time.Second
