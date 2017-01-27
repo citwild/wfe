@@ -2,21 +2,23 @@ package cli
 
 import (
 	"crypto/tls"
-	"fmt"
 	"net/http"
 	"strings"
 
+	"net"
+
 	"github.com/citwild/wfe/api"
+	"github.com/citwild/wfe/app"
 	"github.com/citwild/wfe/cli/internal/middleware"
 	"github.com/citwild/wfe/log"
 	"github.com/citwild/wfe/service"
 	"github.com/citwild/wfe/store/mongostore"
+	"github.com/gorilla/mux"
 	"github.com/mwitkow/go-grpc-middleware"
 	"github.com/soheilhy/cmux"
 	"github.com/uber-go/zap"
 	"google.golang.org/grpc"
 	"gopkg.in/mgo.v2"
-	"net"
 	"sourcegraph.com/sourcegraph/go-flags"
 )
 
@@ -68,9 +70,7 @@ func (c *ServeCmd) Execute(_ []string) error {
 
 	// web app
 	httpHandler := http.NewServeMux()
-	httpHandler.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "Not yet implemented")
-	})
+	httpHandler.Handle("/", app.NewHandler(app.NewRouter(mux.NewRouter())))
 
 	err = serveHTTP(c.HTTPAddr, grpcConfig, httpHandler)
 	if err != nil {
