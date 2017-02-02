@@ -52,6 +52,8 @@ func (c *ServeCmd) Execute(_ []string) error {
 	}
 	zap.DynamicLevel().SetLevel(lvl)
 
+	app.Init()
+
 	// database
 	session, err := mgo.Dial(c.MGOHost)
 	if err != nil {

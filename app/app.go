@@ -1,19 +1,14 @@
 package app
 
 import (
-	"github.com/citwild/wfe/app/internal"
-	"net/http"
+	"sync"
+	"github.com/citwild/wfe/app/internal/tmpl"
 )
 
-func NewHandler(r *Router) http.Handler {
+var initOnce sync.Once
 
-	m := http.NewServeMux()
-
-	for route, handler := range internal.Handlers {
-		r.Get(route).Handler(handler)
-	}
-
-	m.Handle("/", r)
-
-	return m
+func Init() {
+	initOnce.Do(func() {
+		tmpl.Load()
+	})
 }
