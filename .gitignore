@@ -83,3 +83,6 @@ _testmain.go
 
 ### Docker ###
 /deploy/wfe
+
+### vfsgen ###
+*_vfsdata.go
