@@ -1,8 +1,8 @@
 package app
 
 import (
-	"net/http"
 	"github.com/citwild/wfe/app/internal"
+	"net/http"
 )
 
 func NewHandler(r *Router) http.Handler {

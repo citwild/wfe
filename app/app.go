@@ -1,8 +1,8 @@
 package app
 
 import (
-	"sync"
 	"github.com/citwild/wfe/app/internal/tmpl"
+	"sync"
 )
 
 var initOnce sync.Once

@@ -1,10 +1,11 @@
 package ui
 
 import (
-	"fmt"
+	"net/http"
+
 	"github.com/citwild/wfe/app"
 	"github.com/citwild/wfe/app/internal"
-	"net/http"
+	"github.com/citwild/wfe/app/internal/tmpl"
 )
 
 func init() {
@@ -15,5 +16,5 @@ func init() {
 }
 
 func serve(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Welcome!")
+	tmpl.Execute(w, r, "layout.html", http.StatusOK, struct{}{})
 }
