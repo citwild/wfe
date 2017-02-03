@@ -23,8 +23,11 @@ aws configure set default.region us-west-2
 # Authenticate against our Docker registry
 eval $(aws ecr get-login)
 
-# Build the wfe command for the Docker context
+# Generate asset virtual filesystems
+go get github.com/shurcooL/vfsgen
 go generate ./../app/templates
+
+# Build the wfe command for the Docker context
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s" -a -installsuffix cgo ./../cmd/wfe
 
 # Build and push the Docker image
