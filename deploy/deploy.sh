@@ -27,7 +27,7 @@ eval $(aws ecr get-login)
 go generate ./../app/templates
 
 # Build the wfe command for the Docker context
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s" -a -installsuffix cgo ./../cmd/wfe
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-s" -a -tags dist -installsuffix cgo ./../cmd/wfe
 
 # Build and push the Docker image
 docker build -t $NAME:$VERSION .
