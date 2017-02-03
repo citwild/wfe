@@ -5,6 +5,7 @@ all: get-deps test
 get-deps:
 	@echo ">> getting dependencies"
 	@go get -u ./...
+	@go get github.com/shurcooL/vfsgen
 
 format:
 	@echo ">> formatting code"
