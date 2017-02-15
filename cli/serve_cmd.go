@@ -9,6 +9,7 @@ import (
 
 	"github.com/citwild/wfe/api"
 	"github.com/citwild/wfe/app"
+	"github.com/citwild/wfe/app/assets"
 	"github.com/citwild/wfe/cli/internal/middleware"
 	"github.com/citwild/wfe/log"
 	"github.com/citwild/wfe/service"
@@ -73,6 +74,7 @@ func (c *ServeCmd) Execute(_ []string) error {
 	// web app
 	httpHandler := http.NewServeMux()
 	httpHandler.Handle("/", app.NewHandler(app.NewRouter(mux.NewRouter())))
+	httpHandler.Handle("/assets/", http.StripPrefix("/assets", assets.NewHandler(mux.NewRouter())))
 
 	err = serveHTTP(c.HTTPAddr, grpcConfig, httpHandler)
 	if err != nil {
@@ -97,7 +99,7 @@ func serveHTTP(addr string, grpcConfig *grpcConfig, httpHandler http.Handler) er
 	}
 
 	// main multiplexer
-	mux := cmux.New(lis)
+	mx := cmux.New(lis)
 
 	// gRPC API
 	grpcSrv := api.NewServer(grpcConfig.servers, grpcConfig.opts...)
@@ -108,13 +110,13 @@ func serveHTTP(addr string, grpcConfig *grpcConfig, httpHandler http.Handler) er
 	httpSrv.Handler = httpHandler
 
 	// multiplex connection between gRPC API and app
-	grpcLis := mux.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
-	httpLis := mux.Match(cmux.Any())
+	grpcLis := mx.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
+	httpLis := mx.Match(cmux.Any())
 
 	log.Info("HTTP running.", zap.String("addr", addr))
 	go func() { log.Fatal("Failed to start grpc server.", zap.Error(grpcSrv.Serve(grpcLis))) }()
 	go func() { log.Fatal("Failed to start http server.", zap.Error(httpSrv.Serve(httpLis))) }()
-	go func() { log.Fatal("Failed to start main multiplexer.", zap.Error(mux.Serve())) }()
+	go func() { log.Fatal("Failed to start main multiplexer.", zap.Error(mx.Serve())) }()
 
 	return nil
 }

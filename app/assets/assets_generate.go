@@ -11,7 +11,6 @@ import (
 func main() {
 	err := vfsgen.Generate(assets.Assets, vfsgen.Options{
 		PackageName:  "assets",
-		BuildTags:    "dist",
 		VariableName: "Assets",
 	})
 	if err != nil {

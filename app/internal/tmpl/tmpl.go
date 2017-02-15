@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 
+	"bytes"
 	tmpldata "github.com/citwild/wfe/app/templates"
-	"sourcegraph.com/sourcegraph/sourcegraph/pkg/httputil"
 )
 
 var templates = map[string]*template.Template{}
@@ -50,12 +50,9 @@ func parseTemplates(sets [][]string) error {
 }
 
 func Execute(w http.ResponseWriter, r *http.Request, name string, status int, data interface{}) error {
-
-	var bw httputil.ResponseBuffer
-
-	bw.WriteHeader(status)
-	if ct := bw.Header().Get("content-type"); ct == "" {
-		bw.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.WriteHeader(status)
+	if ct := w.Header().Get("content-type"); ct == "" {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	}
 
 	t := templates[name]
@@ -63,10 +60,11 @@ func Execute(w http.ResponseWriter, r *http.Request, name string, status int, da
 		return fmt.Errorf("Template %s not found", name)
 	}
 
-	err := t.Execute(&bw, data)
+	var buf bytes.Buffer
+	err := t.Execute(&buf, data)
 	if err != nil {
 		return err
 	}
-
-	return bw.WriteTo(w)
+	_, err = buf.WriteTo(w)
+	return err
 }
