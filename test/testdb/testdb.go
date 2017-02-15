@@ -4,8 +4,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/citwild/wfe/log"
-	"github.com/uber-go/zap"
+	"go.uber.org/zap"
 	"gopkg.in/mgo.v2"
 	"net"
 	"os/exec"
@@ -25,20 +24,20 @@ func New() *TestDB {
 
 	_, err := exec.LookPath("docker")
 	if err != nil {
-		log.Fatal("Docker not available in path.")
+		zap.S.Fatal("Docker not available in path.")
 	}
 
 	out, err := exec.Command("docker", "images", "--no-trunc").Output()
 	if err != nil {
-		log.Fatal("Error running docker to check for image.")
+		zap.S.Fatal("Error running docker to check for image.")
 	}
 
 	haveImage := bytes.Contains(out, []byte(mongoImage))
 	if !haveImage {
-		log.Info("Pulling image...", zap.String("image", mongoImage))
+		zap.S.Info("Pulling image...", "image", mongoImage)
 		out, err = exec.Command("docker", "pull", mongoImage).Output()
 		if err != nil {
-			log.Fatal("Error pulling", zap.Error(err))
+			zap.S.Fatal("Error pulling", err)
 		}
 	}
 

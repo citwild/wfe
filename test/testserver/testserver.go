@@ -4,9 +4,8 @@ import (
 	"crypto/tls"
 	"errors"
 	"github.com/citwild/wfe/api"
-	"github.com/citwild/wfe/log"
 	"github.com/citwild/wfe/test/testdb"
-	"github.com/uber-go/zap"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"io/ioutil"
@@ -28,20 +27,20 @@ func New() *TestServer {
 
 	dir, err := ioutil.TempDir("", "testserver")
 	if err != nil {
-		log.Fatal("Failed to create temp dir.", zap.Error(err))
+		zap.S.Fatal("Failed to create temp dir.", err)
 	}
 	s.tempDir = dir
 
 	keyFile := filepath.Join(s.tempDir, "testserver.key")
 	err = ioutil.WriteFile(keyFile, []byte(localhostKey), 0600)
 	if err != nil {
-		log.Fatal("Failed to write private key.", zap.Error(err))
+		zap.S.Fatal("Failed to write private key.", err)
 	}
 
 	certFile := filepath.Join(s.tempDir, "testserver.crt")
 	err = ioutil.WriteFile(certFile, []byte(localhostCert), 0600)
 	if err != nil {
-		log.Fatal("Failed to write cert.", zap.Error(err))
+		zap.S.Fatal("Failed to write cert.", err)
 	}
 
 	cmdPath := os.Getenv("GOPATH")
@@ -100,12 +99,12 @@ func (s *TestServer) Start() error {
 func (s *TestServer) Close() {
 	err := s.serveCmd.Process.Kill()
 	if err != nil {
-		log.Fatal("Failed to kill serve process.", zap.Error(err))
+		zap.S.Fatal("Failed to kill serve process.", err)
 	}
 
 	err = os.RemoveAll(s.tempDir)
 	if err != nil {
-		log.Fatal("Failed to delete temp dir.", zap.Error(err))
+		zap.S.Fatal("Failed to delete temp dir.", err)
 	}
 
 	s.testDB.Close()

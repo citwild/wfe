@@ -11,13 +11,12 @@ import (
 	"github.com/citwild/wfe/app"
 	"github.com/citwild/wfe/app/assets"
 	"github.com/citwild/wfe/cli/internal/middleware"
-	"github.com/citwild/wfe/log"
 	"github.com/citwild/wfe/service"
 	"github.com/citwild/wfe/store/mongostore"
 	"github.com/gorilla/mux"
 	"github.com/mwitkow/go-grpc-middleware"
 	"github.com/soheilhy/cmux"
-	"github.com/uber-go/zap"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"gopkg.in/mgo.v2"
 	"sourcegraph.com/sourcegraph/go-flags"
@@ -30,7 +29,7 @@ func init() {
 			"Starts an HTTP server running the app and API.",
 			&ServeCmd{})
 		if err != nil {
-			log.Fatal("Failed to add serve command.", zap.Error(err))
+			zap.S.Fatal("Failed to add serve command.", err)
 		}
 	})
 }
@@ -46,12 +45,12 @@ type ServeCmd struct {
 }
 
 func (c *ServeCmd) Execute(_ []string) error {
-	var lvl zap.Level
-	err := lvl.UnmarshalText([]byte(globalOpt.LogLevel))
-	if err != nil {
-		return err
-	}
-	zap.DynamicLevel().SetLevel(lvl)
+	//var lvl zap.Level
+	//err := lvl.UnmarshalText([]byte(globalOpt.LogLevel))
+	//if err != nil {
+	//	return err
+	//}
+	//zap.AtomicLevel.SetLevel(lvl)
 
 	app.Init()
 
@@ -113,10 +112,10 @@ func serveHTTP(addr string, grpcConfig *grpcConfig, httpHandler http.Handler) er
 	grpcLis := mx.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
 	httpLis := mx.Match(cmux.Any())
 
-	log.Info("HTTP running.", zap.String("addr", addr))
-	go func() { log.Fatal("Failed to start grpc server.", zap.Error(grpcSrv.Serve(grpcLis))) }()
-	go func() { log.Fatal("Failed to start http server.", zap.Error(httpSrv.Serve(httpLis))) }()
-	go func() { log.Fatal("Failed to start main multiplexer.", zap.Error(mx.Serve())) }()
+	zap.S.Info("HTTP running.", "addr", addr)
+	go func() { zap.S.Fatal("Failed to start grpc server.", grpcSrv.Serve(grpcLis)) }()
+	go func() { zap.S.Fatal("Failed to start http server.", httpSrv.Serve(httpLis)) }()
+	go func() { zap.S.Fatal("Failed to start main multiplexer.", mx.Serve()) }()
 
 	return nil
 }
@@ -150,8 +149,8 @@ func serveHTTPS(addr string, grpcConfig *grpcConfig, httpHandler http.Handler, c
 		}
 	})
 
-	log.Info("HTTPS running.", zap.String("addr", addr))
-	go func() { log.Fatal("Failed to start https server.", zap.Error(srv.Serve(lis))) }()
+	zap.S.Info("HTTPS running.", "addr", addr)
+	go func() { zap.S.Fatal("Failed to start https server.", srv.Serve(lis)) }()
 
 	return nil
 }
