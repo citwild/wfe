@@ -1,13 +1,14 @@
 package tmpl
 
 import (
-	"bytes"
 	"fmt"
-	tmpldata "github.com/citwild/wfe/app/templates"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
+
+	tmpldata "github.com/citwild/wfe/app/templates"
+	"sourcegraph.com/sourcegraph/sourcegraph/pkg/httputil"
 )
 
 var templates = map[string]*template.Template{}
@@ -49,9 +50,12 @@ func parseTemplates(sets [][]string) error {
 }
 
 func Execute(w http.ResponseWriter, r *http.Request, name string, status int, data interface{}) error {
-	w.WriteHeader(status)
-	if ct := w.Header().Get("content-type"); ct == "" {
-		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+
+	var bw httputil.ResponseBuffer
+
+	bw.WriteHeader(status)
+	if ct := bw.Header().Get("content-type"); ct == "" {
+		bw.Header().Set("Content-Type", "text/html; charset=utf-8")
 	}
 
 	t := templates[name]
@@ -59,11 +63,10 @@ func Execute(w http.ResponseWriter, r *http.Request, name string, status int, da
 		return fmt.Errorf("Template %s not found", name)
 	}
 
-	var buf bytes.Buffer
-	err := t.Execute(&buf, data)
+	err := t.Execute(&bw, data)
 	if err != nil {
 		return err
 	}
-	_, err = buf.WriteTo(w)
-	return err
+
+	return bw.WriteTo(w)
 }
