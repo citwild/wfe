@@ -24,6 +24,7 @@ aws configure set default.region us-west-2
 eval $(aws ecr get-login)
 
 # Generate asset virtual filesystems
+go generate ./../app/assets
 go generate ./../app/templates
 
 # Build the wfe command for the Docker context
