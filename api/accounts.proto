@@ -6,7 +6,7 @@ message EmailAddress {
 }
 
 service Accounts {
-	rpc Create(NewAccount) returns (CreatedAccount);
+	rpc Create (NewAccount) returns (CreatedAccount);
 }
 
 message CreatedAccount {

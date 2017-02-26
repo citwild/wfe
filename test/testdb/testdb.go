@@ -24,20 +24,20 @@ func New() *TestDB {
 
 	_, err := exec.LookPath("docker")
 	if err != nil {
-		zap.S.Fatal("Docker not available in path.")
+		zap.S().Fatal("Docker not available in path.")
 	}
 
 	out, err := exec.Command("docker", "images", "--no-trunc").Output()
 	if err != nil {
-		zap.S.Fatal("Error running docker to check for image.")
+		zap.S().Fatal("Error running docker to check for image.")
 	}
 
 	haveImage := bytes.Contains(out, []byte(mongoImage))
 	if !haveImage {
-		zap.S.Info("Pulling image...", "image", mongoImage)
+		zap.S().Info("Pulling image...", "image", mongoImage)
 		out, err = exec.Command("docker", "pull", mongoImage).Output()
 		if err != nil {
-			zap.S.Fatal("Error pulling", err)
+			zap.S().Fatal("Error pulling", err)
 		}
 	}
 

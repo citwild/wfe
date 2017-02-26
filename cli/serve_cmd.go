@@ -29,7 +29,7 @@ func init() {
 			"Starts an HTTP server running the app and API.",
 			&ServeCmd{})
 		if err != nil {
-			zap.S.Fatal("Failed to add serve command.", err)
+			zap.S().Fatal("Failed to add serve command.", err)
 		}
 	})
 }
@@ -112,10 +112,16 @@ func serveHTTP(addr string, grpcConfig *grpcConfig, httpHandler http.Handler) er
 	grpcLis := mx.Match(cmux.HTTP2HeaderField("content-type", "application/grpc"))
 	httpLis := mx.Match(cmux.Any())
 
-	zap.S.Info("HTTP running.", "addr", addr)
-	go func() { zap.S.Fatal("Failed to start grpc server.", grpcSrv.Serve(grpcLis)) }()
-	go func() { zap.S.Fatal("Failed to start http server.", httpSrv.Serve(httpLis)) }()
-	go func() { zap.S.Fatal("Failed to start main multiplexer.", mx.Serve()) }()
+	zap.S().Info("HTTP running.", "addr", addr)
+	go func() {
+		zap.S().Fatal("Failed to start grpc server.", grpcSrv.Serve(grpcLis))
+	}()
+	go func() {
+		zap.S().Fatal("Failed to start http server.", httpSrv.Serve(httpLis))
+	}()
+	go func() {
+		zap.S().Fatal("Failed to start main multiplexer.", mx.Serve())
+	}()
 
 	return nil
 }
@@ -149,8 +155,10 @@ func serveHTTPS(addr string, grpcConfig *grpcConfig, httpHandler http.Handler, c
 		}
 	})
 
-	zap.S.Info("HTTPS running.", "addr", addr)
-	go func() { zap.S.Fatal("Failed to start https server.", srv.Serve(lis)) }()
+	zap.S().Info("HTTPS running.", "addr", addr)
+	go func() {
+		zap.S().Fatal("Failed to start https server.", srv.Serve(lis))
+	}()
 
 	return nil
 }

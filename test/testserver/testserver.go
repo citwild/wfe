@@ -27,20 +27,20 @@ func New() *TestServer {
 
 	dir, err := ioutil.TempDir("", "testserver")
 	if err != nil {
-		zap.S.Fatal("Failed to create temp dir.", err)
+		zap.S().Fatal("Failed to create temp dir.", err)
 	}
 	s.tempDir = dir
 
 	keyFile := filepath.Join(s.tempDir, "testserver.key")
 	err = ioutil.WriteFile(keyFile, []byte(localhostKey), 0600)
 	if err != nil {
-		zap.S.Fatal("Failed to write private key.", err)
+		zap.S().Fatal("Failed to write private key.", err)
 	}
 
 	certFile := filepath.Join(s.tempDir, "testserver.crt")
 	err = ioutil.WriteFile(certFile, []byte(localhostCert), 0600)
 	if err != nil {
-		zap.S.Fatal("Failed to write cert.", err)
+		zap.S().Fatal("Failed to write cert.", err)
 	}
 
 	cmdPath := os.Getenv("GOPATH")
@@ -99,12 +99,12 @@ func (s *TestServer) Start() error {
 func (s *TestServer) Close() {
 	err := s.serveCmd.Process.Kill()
 	if err != nil {
-		zap.S.Fatal("Failed to kill serve process.", err)
+		zap.S().Fatal("Failed to kill serve process.", err)
 	}
 
 	err = os.RemoveAll(s.tempDir)
 	if err != nil {
-		zap.S.Fatal("Failed to delete temp dir.", err)
+		zap.S().Fatal("Failed to delete temp dir.", err)
 	}
 
 	s.testDB.Close()
