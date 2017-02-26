@@ -17,7 +17,11 @@ func NewHandler(r *mux.Router) http.Handler {
 		}
 		defer f.Close()
 
-		fi, _ := f.Stat()
+		fi, err := f.Stat()
+		if err != nil {
+			http.Error(w, "Failed to get assest file info", http.StatusInternalServerError)
+			return
+		}
 
 		http.ServeContent(w, r, fi.Name(), fi.ModTime(), f)
 	})
