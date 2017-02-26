@@ -45,12 +45,18 @@ type ServeCmd struct {
 }
 
 func (c *ServeCmd) Execute(_ []string) error {
-	//var lvl zap.Level
-	//err := lvl.UnmarshalText([]byte(globalOpt.LogLevel))
-	//if err != nil {
-	//	return err
-	//}
-	//zap.AtomicLevel.SetLevel(lvl)
+	var lvl zap.AtomicLevel
+	err := lvl.UnmarshalText([]byte(globalOpt.LogLevel))
+	if err != nil {
+		return err
+	}
+	config := zap.NewProductionConfig()
+	config.Level = lvl
+	log, err := config.Build()
+	if err != nil {
+		return err
+	}
+	zap.ReplaceGlobals(log)
 
 	app.Init()
 
