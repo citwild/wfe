@@ -37,6 +37,12 @@ On Windows:
 "%GOPATH%"\bin\wfe -h
 ```
 
+## Acknowledgements
+
+- [Google I/O talk: Building Sourcegraph, a large-scale code search & cross-reference engine in Go](https://text.sourcegraph.com/google-i-o-talk-building-sourcegraph-a-large-scale-code-search-cross-reference-engine-in-go-1f911b78a82e#.49ahhw3cp)
+- <strike>[sourcegraph](https://github.com/sourcegraph/sourcegraph)</strike> (no longer available)
+- [thesrc](https://github.com/sourcegraph/thesrc)
+ 
 ## License
 
 The WFE web app is licensed under the [MIT License](https://opensource.org/licenses/MIT), which is an [open source license](https://opensource.org/docs/osd).
