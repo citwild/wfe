@@ -6,10 +6,13 @@ services:
 - docker
 
 install:
-- make get-deps
+- true
+
+before_script:
+- make dep
 
 script:
-- make test-long
+- make presubmit test-long
 
 before_deploy:
 - curl "https://s3.amazonaws.com/aws-cli/awscli-bundle.zip" -o "awscli-bundle.zip"

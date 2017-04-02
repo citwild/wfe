@@ -42,6 +42,7 @@ On Windows:
 - [Google I/O talk: Building Sourcegraph, a large-scale code search & cross-reference engine in Go](https://text.sourcegraph.com/google-i-o-talk-building-sourcegraph-a-large-scale-code-search-cross-reference-engine-in-go-1f911b78a82e#.49ahhw3cp)
 - <strike>[sourcegraph](https://github.com/sourcegraph/sourcegraph)</strike> (no longer available)
 - [thesrc](https://github.com/sourcegraph/thesrc)
+- [cadvisor](https://github.com/google/cadvisor)
  
 ## License
 

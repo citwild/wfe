@@ -1,11 +1,15 @@
 pkgs = $(shell go list ./... | grep -v vendor)
 
-all: get-deps test
+all: dep presubmit build test
 
-get-deps:
-	@echo ">> getting dependencies"
-	@go get -u ./...
+dep:
+	@echo ">> getting/updating dependencies"
+	@go get -u $(pkgs)
 	@go get github.com/shurcooL/vfsgen
+
+generate:
+	@echo ">> generating code"
+	@go generate $(pkgs)
 
 format:
 	@echo ">> formatting code"
@@ -15,20 +19,36 @@ vet:
 	@echo ">> vetting code"
 	@go vet $(pkgs)
 
-generate:
-	@echo ">> generating code"
-	@go generate $(pkgs)
+presubmit: vet
+	@echo ">> checking go formatting"
+	@./build/check_gofmt.sh
+
+assets:
+	@echo ">> building assets"
+	@./build/assets.sh
+
+build: assets
+	@echo ">> building binaries"
+	@./build/build.sh
 
 test:
 	@echo ">> running tests"
 	@go test -short -race $(pkgs)
 
-test-long: install
+test-long: build
 	@echo ">> running tests long"
 	@go test -race $(pkgs)
 
-install:
-	@echo ">> installing binary"
-	@go install ./cmd/wfe
+release:
+	@echo ">> building release binaries"
+	@./build/release.sh $(VERSION)
 
-.PHONY: all get-deps format vet generate test test-long install
+docker:
+	@echo ">> building docker image"
+	@docker build -t wfe:$(shell git rev-parse --short HEAD) -f deploy/Dockerfile .
+
+clean:
+	@echo ">> removing compiled files"
+	@go clean -i $(pkgs)
+
+.PHONY: all dep generate format vet presubmit assets build test test-long release docker clean

@@ -11,7 +11,7 @@ import (
 func main() {
 	err := vfsgen.Generate(templates.Templates, vfsgen.Options{
 		PackageName:  "templates",
-		BuildTags:    "dist",
+		BuildTags:    "release",
 		VariableName: "Templates",
 	})
 	if err != nil {
