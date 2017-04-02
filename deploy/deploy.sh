@@ -4,7 +4,6 @@ set -e
 # usage: ./deploy.sh dev master 32d1f89fb6f65cc9d7a0d3573ff2c8217fa58c58
 
 PARENT_PATH=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
-#cd "$PARENT_PATH"
 
 AWS_ACCOUNT_ID=827562370231
 EB_BUCKET=elasticbeanstalk-us-west-2-827562370231
@@ -19,7 +18,7 @@ ZIP=$VERSION.zip
 aws configure set default.region us-west-2
 
 # Authenticate against our Docker registry
-eval $(aws ecr get-login)
+eval $(aws ecr get-login | sed -e 's/-e none//g')
 
 # Build assets
 make assets
