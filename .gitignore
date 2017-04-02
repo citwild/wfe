@@ -86,3 +86,7 @@ _testmain.go
 
 ### vfsgen ###
 *_vfsdata.go
+
+### dep (temporarily ignored while dep is under development) ###
+lock.json
+manifest.json

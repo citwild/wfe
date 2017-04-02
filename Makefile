@@ -1,11 +1,6 @@
 pkgs = $(shell go list ./... | grep -v vendor)
 
-all: dep presubmit build test
-
-dep:
-	@echo ">> getting/updating dependencies"
-	@go get -u $(pkgs)
-	@go get github.com/shurcooL/vfsgen
+all: presubmit build test
 
 generate:
 	@echo ">> generating code"
@@ -51,4 +46,4 @@ clean:
 	@echo ">> removing compiled files"
 	@go clean -i $(pkgs)
 
-.PHONY: all dep generate format vet presubmit assets build test test-long release docker clean
+.PHONY: all generate format vet presubmit assets build test test-long release docker clean
