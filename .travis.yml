@@ -8,9 +8,6 @@ services:
 install:
 - true
 
-before_script:
-- make dep
-
 script:
 - make presubmit test-long
 
